@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    container_name: projetoacer_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/meubanco
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: example
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7.0
+    container_name: projetoacer_mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: meubanco
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
