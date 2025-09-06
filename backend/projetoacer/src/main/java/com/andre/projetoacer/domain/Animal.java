@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.andre.projetoacer.enums.Size;
-import com.andre.projetoacer.enums.Type;
+import com.andre.projetoacer.enums.Species;
 
 
 public class Animal implements Serializable{
@@ -14,11 +14,11 @@ public class Animal implements Serializable{
 	private String name;
 	private Integer age;
 	private Double weight;
-	private Type type;
+	private Species type;
 	private Size size;
 	private Boolean isAdopted;
 	
-	public Animal(String name, Integer age, Double weight, Type type, Size size) {
+	public Animal(String name, Integer age, Double weight, Species type, Size size) {
 		super();
 		this.name = name;
 		this.age = age;
@@ -60,11 +60,11 @@ public class Animal implements Serializable{
 		this.weight = weight;
 	}
 
-	public Type getType() {
+	public Species getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(Species type) {
 		this.type = type;
 	}
 

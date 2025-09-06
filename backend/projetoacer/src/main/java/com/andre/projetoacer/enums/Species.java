@@ -1,6 +1,6 @@
 package com.andre.projetoacer.enums;
 
-public enum Type {
-	STREET,
-	DOMESTIC
+public enum Species {
+	DOG,
+	CAT
 }
