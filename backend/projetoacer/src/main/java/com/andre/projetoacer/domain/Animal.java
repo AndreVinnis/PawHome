@@ -3,16 +3,21 @@ package com.andre.projetoacer.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
 
-
+@Document
 public class Animal implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Id
 	private Integer id;
+	
 	private String name;
 	private Integer age;
 	private Double weight;
