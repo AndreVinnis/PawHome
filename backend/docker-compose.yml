@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/meubanco
+      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/PawHome?authSource=admin
       SPRING_DATA_MONGODB_USERNAME: root
       SPRING_DATA_MONGODB_PASSWORD: example
     depends_on:
@@ -18,7 +18,7 @@ services:
     ports:
       - "28017:27017"
     environment:
-      MONGO_INITDB_DATABASE: meubanco
+      MONGO_INITDB_DATABASE: PawHome
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:

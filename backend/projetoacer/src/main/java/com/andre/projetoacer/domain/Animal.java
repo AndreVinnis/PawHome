@@ -16,7 +16,7 @@ public class Animal implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private Integer id;
+	private String id;
 	
 	private String name;
 	private Integer age;
@@ -31,9 +31,9 @@ public class Animal implements Serializable{
 		
 	}
 	
-	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type,
-			Boolean isAdopted) {
+	public Animal(String id, String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.age = age;
 		this.weight = weight;
@@ -41,14 +41,14 @@ public class Animal implements Serializable{
 		this.species = species;
 		this.size = size;
 		this.type = type;
-		this.isAdopted = isAdopted;
+		isAdopted = false;
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
