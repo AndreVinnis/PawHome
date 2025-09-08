@@ -1,42 +1,27 @@
-package com.andre.projetoacer.domain;
+package com.andre.projetoacer.DTO;
 
-import java.io.Serializable;
 import java.util.Objects;
 
+import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.enums.Sex;
-import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
 
-
-public class Animal implements Serializable{
-	private static final long serialVersionUID = 1L;
-	
+public class AnimalDTO {
 	private Integer id;
 	private String name;
-	private Integer age;
-	private Double weight;
 	private Sex sex;
 	private Species species;
-	private Size size;
 	private Type type;
 	private Boolean isAdopted;
 	
-	public Animal() {
-		
-	}
-	
-	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type,
-			Boolean isAdopted) {
-		super();
-		this.name = name;
-		this.age = age;
-		this.weight = weight;
-		this.sex = sex;
-		this.species = species;
-		this.size = size;
-		this.type = type;
-		this.isAdopted = isAdopted;
+	public AnimalDTO(Animal animal) {
+		id = animal.getId();
+		name = animal.getName();
+		sex = animal.getSex();
+		species = animal.getSpecies();
+		type = animal.getType();
+		isAdopted = animal.getIsAdopted();
 	}
 	
 	public Integer getId() {
@@ -55,22 +40,6 @@ public class Animal implements Serializable{
 		this.name = name;
 	}
 
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
-	public Double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
-
 	public Sex getSex() {
 		return sex;
 	}
@@ -85,14 +54,6 @@ public class Animal implements Serializable{
 
 	public void setSpecies(Species species) {
 		this.species = species;
-	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
 	}
 
 	public Type getType() {
@@ -124,7 +85,7 @@ public class Animal implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Animal other = (Animal) obj;
+		AnimalDTO other = (AnimalDTO) obj;
 		return Objects.equals(id, other.id);
 	}
 }
