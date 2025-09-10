@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.andre.projetoacer.domain.Animal;
 
 @Repository
-public interface AnimalRepository extends MongoRepository<Animal, Integer>{
+public interface AnimalRepository extends MongoRepository<Animal, String>{
 
 }

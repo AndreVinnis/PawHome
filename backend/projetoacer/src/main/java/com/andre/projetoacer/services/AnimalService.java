@@ -1,6 +1,7 @@
 package com.andre.projetoacer.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,5 +16,9 @@ public class AnimalService {
 
 	public List<Animal> findAll(){
 		return repository.findAll();
+	}
+	
+	public Optional<Animal> findById(String id) {
+		return repository.findById(id);
 	}
 }

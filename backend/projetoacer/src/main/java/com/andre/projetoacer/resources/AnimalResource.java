@@ -1,6 +1,7 @@
 package com.andre.projetoacer.resources;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +23,11 @@ public class AnimalResource {
 	public ResponseEntity<List<Animal>> findAll(){
 		List<Animal> list = service.findAll();
 		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping
+	public ResponseEntity<Optional<Animal>> findById(String id){
+		Optional<Animal> animal = service.findById(id);
+		return ResponseEntity.ok().body(animal);
 	}
 }
