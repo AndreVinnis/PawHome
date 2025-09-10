@@ -5,21 +5,32 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.andre.projetoacer.enums.PetDisease;
 import com.andre.projetoacer.enums.PetMedication;
 
+@Document(collation = "records")
 public class MedicalRecords implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
+	@Id
+	private String id;
 	private List<PetDisease> diseases = new LinkedList<>();
 	private List<PetMedication> medications = new LinkedList<>();
 	
-	public Integer getId() {
+	public MedicalRecords(List<PetDisease> diseases, List<PetMedication> medications) {
+		super();
+		this.diseases = diseases;
+		this.medications = medications;
+	}
+
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

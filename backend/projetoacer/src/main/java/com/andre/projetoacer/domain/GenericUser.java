@@ -1,15 +1,28 @@
 package com.andre.projetoacer.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class GenericUser {
-	private Integer id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+
+public abstract class GenericUser implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String id;
+	
 	private String name;
 	private String email;
 	private String phoneNumber;
 	private String password;
 	
 	private Adress adress;
+	
+	@Field(targetType = FieldType.BINARY)
+	private byte[] imagem;
 	
 	public GenericUser() {
 		
@@ -24,11 +37,11 @@ public abstract class GenericUser {
 		this.adress = adress;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -70,6 +83,14 @@ public abstract class GenericUser {
 
 	public void setAdress(Adress adress) {
 		this.adress = adress;
+	}
+	
+	public byte[] getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(byte[] imagem) {
+		this.imagem = imagem;
 	}
 
 	@Override

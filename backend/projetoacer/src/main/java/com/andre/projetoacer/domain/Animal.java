@@ -5,19 +5,21 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
 
-@Document
-public class Animal implements Serializable{
+@Document(collation = "animal")
+public class Animal implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private String id;
-	
+
 	private String name;
 	private Integer age;
 	private Double weight;
@@ -26,14 +28,17 @@ public class Animal implements Serializable{
 	private Size size;
 	private Type type;
 	private Boolean isAdopted;
-	
+	private String descricao;
+
+	@Field(targetType = FieldType.BINARY)
+	private byte[] imagem;
+
 	public Animal() {
-		
+
 	}
-	
-	public Animal(String id, String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type) {
+
+	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type, String descricao) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.age = age;
 		this.weight = weight;
@@ -41,9 +46,10 @@ public class Animal implements Serializable{
 		this.species = species;
 		this.size = size;
 		this.type = type;
+		this.descricao = descricao;
 		isAdopted = false;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -114,6 +120,22 @@ public class Animal implements Serializable{
 
 	public void setIsAdopted(Boolean isAdopted) {
 		this.isAdopted = isAdopted;
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
+	public byte[] getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(byte[] imagem) {
+		this.imagem = imagem;
 	}
 
 	@Override

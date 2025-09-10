@@ -1,6 +1,10 @@
 package com.andre.projetoacer.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collation = "institution")
 public class Institution extends GenericUser{
+	private static final long serialVersionUID = 1L;
 	private String cnpj;
 	private String description;
 	

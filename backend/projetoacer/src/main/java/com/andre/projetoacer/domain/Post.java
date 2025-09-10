@@ -1,10 +1,18 @@
 package com.andre.projetoacer.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
-public class Post {
-	private Integer id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="post")
+public class Post implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	private String id;
 	private Date date;
 	private String title;
 	
@@ -12,18 +20,17 @@ public class Post {
 		
 	}
 	
-	public Post(Integer id, Date date, String title) {
+	public Post(Date date, String title) {
 		super();
-		this.id = id;
 		this.date = date;
 		this.title = title;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
