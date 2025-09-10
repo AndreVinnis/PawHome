@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -31,7 +32,7 @@ public class Animal implements Serializable {
 	private String descricao;
 
 	@Field(targetType = FieldType.BINARY)
-	private byte[] imagem;
+	private byte[] image;
 
 	public Animal() {
 
@@ -130,12 +131,22 @@ public class Animal implements Serializable {
 		this.descricao = descricao;
 	}
 	
-	public byte[] getImagem() {
-		return imagem;
+	public byte[] getImage() {
+		return image;
 	}
 
-	public void setImagem(byte[] imagem) {
-		this.imagem = imagem;
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+	
+	public String imagemFilePath() {
+		String imagemUrl = ServletUriComponentsBuilder
+     	        .fromCurrentContextPath()
+     	        .path("/posts/") //tlz dê erro (com certeza vai)
+     	        .path(id)
+     	        .path("/image")
+     	        .toUriString();
+		return imagemUrl;
 	}
 
 	@Override

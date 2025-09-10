@@ -6,6 +6,10 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+
+import com.andre.projetoacer.DTO.AuthorDTO;
 
 @Document(collection="post")
 public class Post implements Serializable {
@@ -15,15 +19,23 @@ public class Post implements Serializable {
 	private String id;
 	private Date date;
 	private String title;
+	private AuthorDTO author; 
+	
+	@Field(targetType = FieldType.BINARY) 
+    private byte[] imageAnimal;
+	
+	@Field(targetType = FieldType.BINARY) 
+    private byte[] imageUser;
 	
 	public Post() {
 		
 	}
 	
-	public Post(Date date, String title) {
+	public Post(Date date, String title, AuthorDTO author) {
 		super();
 		this.date = date;
 		this.title = title;
+		this.author = author;
 	}
 
 	public String getId() {
@@ -48,6 +60,30 @@ public class Post implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public AuthorDTO getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(AuthorDTO author) {
+		this.author = author;
+	}
+
+	public byte[] getImageAnimal() {
+		return imageAnimal;
+	}
+
+	public void setImageAnimal(byte[] imageAnimal) {
+		this.imageAnimal = imageAnimal;
+	}
+
+	public byte[] getImageUser() {
+		return imageUser;
+	}
+
+	public void setImageUser(byte[] imageUser) {
+		this.imageUser = imageUser;
 	}
 
 	@Override

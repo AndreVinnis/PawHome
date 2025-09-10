@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public abstract class GenericUser implements Serializable {
 
@@ -22,7 +23,7 @@ public abstract class GenericUser implements Serializable {
 	private Adress adress;
 	
 	@Field(targetType = FieldType.BINARY)
-	private byte[] imagem;
+	private byte[] image;
 	
 	public GenericUser() {
 		
@@ -85,12 +86,22 @@ public abstract class GenericUser implements Serializable {
 		this.adress = adress;
 	}
 	
-	public byte[] getImagem() {
-		return imagem;
+	public byte[] getImage() {
+		return image;
 	}
 
-	public void setImagem(byte[] imagem) {
-		this.imagem = imagem;
+	public void setImagem(byte[] image) {
+		this.image = image;
+	}
+	
+	public String imagemFilePath() {
+		String imagemUrl = ServletUriComponentsBuilder
+     	        .fromCurrentContextPath()
+     	        .path("/posts/") //tlz dê erro (com certeza vai)
+     	        .path(id)
+     	        .path("/image")
+     	        .toUriString();
+		return imagemUrl;
 	}
 
 	@Override
