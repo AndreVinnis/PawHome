@@ -7,44 +7,30 @@ import com.andre.projetoacer.domain.User;
 
 public class AuthorDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
+	private String userId;
 	private String name;
-	private String email;
-	private String phoneNumber;
-	private String[] adressResumed = new String[2];
 	private String imagemUrl;
 	
+	public AuthorDTO() {
+		
+	}
 	public AuthorDTO(User user) {
+		userId = user.getId();
 		name = user.getName();
-		email = user.getEmail();
-		phoneNumber = user.getPhoneNumber();
-		adressResumed[0] = user.getAdress().getCity();
-		adressResumed[1] = user.getAdress().getNeighborhood();
-		imagemUrl = user.imagemFilePath();
+		//imagemUrl = user.imagemFilePath();
 	}
 	
 	public AuthorDTO(Institution institution) {
 		name = institution.getName();
-		email = institution.getEmail();
-		phoneNumber = institution.getPhoneNumber();
-		adressResumed[0] = institution.getAdress().getCity();
-		adressResumed[1] = institution.getAdress().getNeighborhood();
 		imagemUrl = institution.imagemFilePath();
 	}
-
+	
+	public String getUserID() {
+		return userId;
+	}
+	
 	public String getName() {
 		return name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public String[] getAdressResumed() {
-		return adressResumed;
 	}
 
 	public String getImagemUrl() {

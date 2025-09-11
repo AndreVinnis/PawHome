@@ -2,15 +2,15 @@ package com.andre.projetoacer.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "user")
+@Document
 public class User extends GenericUser{
 	private static final long serialVersionUID = 1L;
 	private String secondName;
 	private String cpf;
 	private Integer age;
 	
-	public User(String secondName, String cpf, Integer age) {
-		super();
+	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Integer age) {
+		super(name, email, phoneNumber, password, adress);
 		this.secondName = secondName;
 		this.cpf = cpf;
 		this.age = age;

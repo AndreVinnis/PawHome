@@ -1,7 +1,8 @@
 package com.andre.projetoacer.domain;
 
 import java.io.Serializable;
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -9,9 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+import com.andre.projetoacer.DTO.AnimalDTO;
 import com.andre.projetoacer.DTO.AuthorDTO;
 
-@Document(collection="post")
+@Document
 public class Post implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -20,6 +22,7 @@ public class Post implements Serializable {
 	private Date date;
 	private String title;
 	private AuthorDTO author; 
+	private AnimalDTO animalDTO;
 	
 	@Field(targetType = FieldType.BINARY) 
     private byte[] imageAnimal;
@@ -27,11 +30,12 @@ public class Post implements Serializable {
 	@Field(targetType = FieldType.BINARY) 
     private byte[] imageUser;
 	
-	public Post(Date date, String title, AuthorDTO author) {
+	public Post(Date date, String title, AuthorDTO author, AnimalDTO animalDTO) {
 		super();
 		this.date = date;
 		this.title = title;
 		this.author = author;
+		this.animalDTO = animalDTO;
 	}
 
 	public String getId() {
@@ -64,6 +68,14 @@ public class Post implements Serializable {
 
 	public void setAuthor(AuthorDTO author) {
 		this.author = author;
+	}
+	
+	public AnimalDTO getAnimalDTO() {
+		return animalDTO;
+	}
+
+	public void setAnimalDTO(AnimalDTO animal) {
+		this.animalDTO = animal;
 	}
 
 	public byte[] getImageAnimal() {

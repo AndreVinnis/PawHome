@@ -8,8 +8,8 @@ public class Institution extends GenericUser{
 	private String cnpj;
 	private String description;
 	
-	public Institution(String cnpj, String description) {
-		super();
+	public Institution(String name, String email, String phoneNumber, String password, Adress adress, String cnpj, String description) {
+		super(name, email, phoneNumber, password, adress);
 		this.cnpj = cnpj;
 		this.description = description;
 	}

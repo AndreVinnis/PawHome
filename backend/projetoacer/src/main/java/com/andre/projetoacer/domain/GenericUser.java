@@ -103,7 +103,7 @@ public abstract class GenericUser implements Serializable {
      	        .toUriString();
 		return imagemUrl;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

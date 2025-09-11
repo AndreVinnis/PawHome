@@ -9,24 +9,39 @@ import com.andre.projetoacer.enums.Type;
 public class AnimalDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	private String animalId;
 	private String name;
+	private Integer age;
 	private Sex sex;
 	private Type type;
 	private Boolean isAdopted;
 	private String imagemUrl;
 	
+	public AnimalDTO() {
+		
+	}
 	public AnimalDTO(Animal animal) {
+		animalId = animal.getId();
 		name = animal.getName();
+		age = animal.getAge();
 		sex = animal.getSex();
 		type = animal.getType();
 		isAdopted = animal.getIsAdopted();
-		imagemUrl = animal.imagemFilePath();
+		//imagemUrl = animal.imagemFilePath();
+	}
+	
+	public String getAnimalId() {
+		return animalId;
 	}
 	
 	public String getName() {
 		return name;
 	}
-
+	
+	public Integer getAge() {
+		return age;
+	}
+	
 	public Sex getSex() {
 		return sex;
 	}
