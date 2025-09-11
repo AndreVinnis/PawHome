@@ -1,23 +1,18 @@
-# Etapa 1: Build do projeto
-FROM maven:3.9.5-eclipse-temurin-17 AS build
+# Imagem base com Maven e JDK
+FROM maven:3.9.5-eclipse-temurin-17
 WORKDIR /app
 
-# Copia o pom.xml e as fontes
+# Copia o pom.xml primeiro para aproveitar cache do Docker
 COPY projetoacer/pom.xml .
+
+# Instala dependências sem compilar o código ainda
+RUN mvn dependency:go-offline
+
+# Copia o código-fonte
 COPY projetoacer/src ./src
 
-# Compila o projeto e gera o JAR
-RUN mvn clean package -DskipTests
-
-# Etapa 2: Imagem final
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-
-# Copia o JAR gerado para a imagem final
-COPY --from=build /app/target/*.jar app.jar
-
-# Expondo a porta padrão do Spring Boot
+# Porta padrão do Spring Boot
 EXPOSE 8080
 
-# Comando para rodar a aplicação
-ENTRYPOINT ["java","-jar","app.jar"]
+# Comando para rodar a aplicação em modo desenvolvimento
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]

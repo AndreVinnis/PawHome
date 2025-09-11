@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.enums.Sex;
-import com.andre.projetoacer.enums.Species;
+import com.andre.projetoacer.enums.Type;
 
 public class AnimalDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
 	private Sex sex;
-	private Species species;
+	private Type type;
 	private Boolean isAdopted;
 	private String imagemUrl;
 	
 	public AnimalDTO(Animal animal) {
 		name = animal.getName();
 		sex = animal.getSex();
-		species = animal.getSpecies();
+		type = animal.getType();
 		isAdopted = animal.getIsAdopted();
 		imagemUrl = animal.imagemFilePath();
 	}
@@ -31,8 +31,8 @@ public class AnimalDTO implements Serializable{
 		return sex;
 	}
 
-	public Species getSpecies() {
-		return species;
+	public Type getType() {
+		return type;
 	}
 
 	public Boolean getIsAdopted() {

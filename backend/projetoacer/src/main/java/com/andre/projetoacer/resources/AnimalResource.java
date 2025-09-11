@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +26,8 @@ public class AnimalResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping
-	public ResponseEntity<Optional<Animal>> findById(String id){
+	@GetMapping("/{id}")
+	public ResponseEntity<Optional<Animal>> findById(@PathVariable String id){
 		Optional<Animal> animal = service.findById(id);
 		return ResponseEntity.ok().body(animal);
 	}

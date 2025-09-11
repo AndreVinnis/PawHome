@@ -27,10 +27,6 @@ public class Post implements Serializable {
 	@Field(targetType = FieldType.BINARY) 
     private byte[] imageUser;
 	
-	public Post() {
-		
-	}
-	
 	public Post(Date date, String title, AuthorDTO author) {
 		super();
 		this.date = date;
