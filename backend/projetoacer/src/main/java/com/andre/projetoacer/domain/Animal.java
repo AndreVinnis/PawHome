@@ -14,7 +14,7 @@ import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
 
-@Document(collation = "animal")
+@Document
 public class Animal implements Serializable {
 	private static final long serialVersionUID = 1L;
 
