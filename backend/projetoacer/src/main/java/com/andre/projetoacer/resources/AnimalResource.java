@@ -1,16 +1,27 @@
 package com.andre.projetoacer.resources;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.domain.Animal;
+import com.andre.projetoacer.enums.Sex;
+import com.andre.projetoacer.enums.Size;
+import com.andre.projetoacer.enums.Species;
+import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.services.AnimalService;
 
 @RestController
@@ -27,8 +38,37 @@ public class AnimalResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Animal>> findById(@PathVariable String id){
-		Optional<Animal> animal = service.findById(id);
+	public ResponseEntity<Animal> findById(@PathVariable String id){
+		Animal animal = service.findById(id);
 		return ResponseEntity.ok().body(animal);
+	}
+	
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> insert(
+		@RequestParam("name") String name, @RequestParam("age") Integer age,
+		@RequestParam("weight") Double weight, @RequestParam("sex") Sex sex,
+		@RequestParam("species") Species species, @RequestParam("size") Size size,
+		@RequestParam("type") Type type, @RequestParam("description") String description, 
+		@RequestParam("image") MultipartFile image) {
+		
+	    try {
+	    	Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, description), image);
+	        	        
+	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
+					.toUri();
+
+			return ResponseEntity.created(uri).build();
+		} catch (IOException e) {
+			System.out.print("Erro ao salvar animal: " + e.getMessage());
+			return ResponseEntity.internalServerError().build();
+		}
+	}
+	
+	@GetMapping("/{id}/imagem")
+	public ResponseEntity<byte[]> getImagem(@PathVariable String id) {
+		Animal animal = service.findById(id);
+
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image.jpg\"").body(animal.getImage());
 	}
 }

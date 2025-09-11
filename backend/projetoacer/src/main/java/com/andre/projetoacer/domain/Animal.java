@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -29,7 +28,7 @@ public class Animal implements Serializable {
 	private Size size;
 	private Type type;
 	private Boolean isAdopted;
-	private String descricao;
+	private String description;
 
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
@@ -38,7 +37,7 @@ public class Animal implements Serializable {
 
 	}
 
-	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type, String descricao) {
+	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type, String description) {
 		super();
 		this.name = name;
 		this.age = age;
@@ -47,7 +46,7 @@ public class Animal implements Serializable {
 		this.species = species;
 		this.size = size;
 		this.type = type;
-		this.descricao = descricao;
+		this.description = description;
 		isAdopted = false;
 	}
 
@@ -123,12 +122,12 @@ public class Animal implements Serializable {
 		this.isAdopted = isAdopted;
 	}
 	
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public byte[] getImage() {
@@ -137,16 +136,6 @@ public class Animal implements Serializable {
 
 	public void setImage(byte[] image) {
 		this.image = image;
-	}
-	
-	public String imagemFilePath() {
-		String imagemUrl = ServletUriComponentsBuilder
-     	        .fromCurrentContextPath()
-     	        .path("/posts/") //tlz dê erro (com certeza vai)
-     	        .path(id)
-     	        .path("/image")
-     	        .toUriString();
-		return imagemUrl;
 	}
 
 	@Override
