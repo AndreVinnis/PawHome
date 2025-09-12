@@ -35,4 +35,43 @@ public class AnimalService {
 		findById(id);
 		repository.deleteById(id);
 	}
+	
+	public Animal update(Animal newObj, String id) {
+		Animal inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		partialUpdate(inicialObj, newObj);
+		return repository.save(inicialObj);   
+	}
+	
+	private void partialUpdate(Animal inicialObj, Animal newObj) {	
+		    if (newObj.getName() != null) {
+				inicialObj.setName(newObj.getName());
+		    }
+		    if (newObj.getAge() != null) {
+				inicialObj.setAge(newObj.getAge());
+		    }
+		    if (newObj.getWeight() != null) {
+				inicialObj.setWeight(newObj.getWeight());
+		    }
+		    if (newObj.getSex() != null) {
+				inicialObj.setSex(newObj.getSex());
+		    }
+		    if (newObj.getSpecies() != null) {
+				inicialObj.setSpecies(newObj.getSpecies());
+		    }
+		    if (newObj.getSize() != null) {
+				inicialObj.setSize(newObj.getSize());
+		    }
+		    if (newObj.getType() != null) {
+				inicialObj.setType(newObj.getType());
+		    }
+		    if (newObj.getIsAdopted() != null) {
+				inicialObj.setIsAdopted(newObj.getIsAdopted());
+		    }
+		    if (newObj.getDescription() != null) {
+				inicialObj.setDescription(newObj.getDescription());
+		    }
+		    if (newObj.getRace() != null) {
+				inicialObj.setRace(newObj.getRace());
+		    }
+		}
 }

@@ -117,11 +117,11 @@ public class Animal implements Serializable {
 		this.type = type;
 	}
 
-	public Race getrace() {
+	public Race getRace() {
 		return race;
 	}
 
-	public void setrace(Race race) {
+	public void setRace(Race race) {
 		this.race = race;
 	}
 
