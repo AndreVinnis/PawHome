@@ -30,4 +30,9 @@ public class AnimalService {
 		animal.setImage(image.getBytes());
         return repository.save(animal);
     }
+	
+	public void delete(String id) {
+		findById(id);
+		repository.deleteById(id);
+	}
 }
