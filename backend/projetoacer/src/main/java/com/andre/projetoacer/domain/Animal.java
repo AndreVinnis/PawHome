@@ -12,6 +12,7 @@ import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
+import com.andre.projetoacer.enums.Race;
 
 @Document
 public class Animal implements Serializable {
@@ -29,6 +30,7 @@ public class Animal implements Serializable {
 	private Type type;
 	private Boolean isAdopted;
 	private String description;
+	private Race race;
 
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
@@ -37,7 +39,7 @@ public class Animal implements Serializable {
 
 	}
 
-	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type, String description) {
+	public Animal(String name, Integer age, Double weight, Sex sex, Species species, Size size, Type type, Race race, String description) {
 		super();
 		this.name = name;
 		this.age = age;
@@ -46,6 +48,7 @@ public class Animal implements Serializable {
 		this.species = species;
 		this.size = size;
 		this.type = type;
+		this.race = race;
 		this.description = description;
 		isAdopted = false;
 	}
@@ -112,6 +115,14 @@ public class Animal implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Race getrace() {
+		return race;
+	}
+
+	public void setrace(Race race) {
+		this.race = race;
 	}
 
 	public Boolean getIsAdopted() {

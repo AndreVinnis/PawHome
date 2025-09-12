@@ -12,6 +12,7 @@ import com.andre.projetoacer.DTO.AuthorDTO;
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.domain.User;
+import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
@@ -30,8 +31,8 @@ public class Instantiation implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		animalRepositoty.deleteAll();
-		Animal animal1 = new Animal("Rex", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, "descricao");
-		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, "descricao");
+		Animal animal1 = new Animal("Rex", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, Race.D_PASTOR_ALEMAO, "descricao");
+		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, Race.D_LABRADOR_RETRIEVER, "descricao");
 		animalRepositoty.saveAll(Arrays.asList(animal1, animal2));
 		
 		User user = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", 20);

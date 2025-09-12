@@ -33,7 +33,7 @@ public enum Race {
     D_DALMATA,                   // Dálmata
     D_PASTOR_AUSTRALIANO,        // Pastor Australiano
     D_BOSTON_TERRIER,            // Boston Terrier
-
+    D_MIXED_BREED,               // Vira-lata (Mutt / Mixed-breed Dog)
 
     //Cats
     D_SIAMESE,                   // Siamese
@@ -66,4 +66,5 @@ public enum Race {
     C_LA_PERM,                   // LaPerm
     C_RUSSIAN_BLUE,              // Azul Russo
     C_EGYPTIAN_MAU,              // Mau Egípcio
+    C_WHITE,                     // Branco
 }

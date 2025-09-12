@@ -22,6 +22,8 @@ import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
+import com.andre.projetoacer.enums.Race;
+
 import com.andre.projetoacer.services.AnimalService;
 
 @RestController
@@ -48,11 +50,11 @@ public class AnimalResource {
 		@RequestParam("name") String name, @RequestParam("age") Integer age,
 		@RequestParam("weight") Double weight, @RequestParam("sex") Sex sex,
 		@RequestParam("species") Species species, @RequestParam("size") Size size,
-		@RequestParam("type") Type type, @RequestParam("description") String description, 
-		@RequestParam("image") MultipartFile image) {
+		@RequestParam("type") Type type,  @RequestParam("race") Race race,
+		@RequestParam("description") String description, @RequestParam("image") MultipartFile image) {
 		
 	    try {
-	    	Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, description), image);
+	    	Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
 	        	        
 	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
 					.toUri();
