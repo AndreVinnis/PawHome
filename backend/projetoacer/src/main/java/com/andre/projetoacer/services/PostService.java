@@ -34,7 +34,7 @@ public class PostService {
 	public Post savePost(String title, Animal animal, GenericUser user, MultipartFile animalImage) throws IOException {
 		Post post = new Post(new Date(), title, new AuthorDTO(user), new AnimalDTO(animal));
 		post.setImageAnimal(animalImage.getBytes());
-		post.setImageUser(user.getImage());
+		//post.setImageUser(user.getImage());
 		
 		return repository.save(post);
 	}

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.repository.UserRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
@@ -37,9 +38,10 @@ public class UserService {
     public void delete(String id) {
         repository.deleteById(id);
     }
+    /*
     public User saveUser(User user, MultipartFile image) throws IOException {
     user.setImage(image.getBytes());
     return repository.save(user);
-}
-
+	}
+	*/
 }
