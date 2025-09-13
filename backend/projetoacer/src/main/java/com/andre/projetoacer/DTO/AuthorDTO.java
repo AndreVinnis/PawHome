@@ -2,8 +2,7 @@ package com.andre.projetoacer.DTO;
 
 import java.io.Serializable;
 
-import com.andre.projetoacer.domain.Institution;
-import com.andre.projetoacer.domain.User;
+import com.andre.projetoacer.domain.GenericUser;
 
 public class AuthorDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -14,15 +13,10 @@ public class AuthorDTO implements Serializable{
 	public AuthorDTO() {
 		
 	}
-	public AuthorDTO(User user) {
-		userId = user.getId();
-		name = user.getName();
-		//imagemUrl = user.imagemFilePath();
-	}
 	
-	public AuthorDTO(Institution institution) {
-		name = institution.getName();
-		imagemUrl = institution.imagemFilePath();
+	public AuthorDTO(GenericUser user) {
+		userId = user.getId();
+		name = user.getName(); 
 	}
 	
 	public String getUserID() {
