@@ -3,15 +3,18 @@ package com.andre.projetoacer.resources;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,9 +52,9 @@ public class PostResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Post>> findById(@PathVariable String id){
-		Optional<Post> animal = service.findById(id);
-		return ResponseEntity.ok().body(animal);
+	public ResponseEntity<Post> findById(@PathVariable String id){
+		Post post = service.findById(id);
+		return ResponseEntity.ok().body(post);
 	}
 	
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -76,5 +79,33 @@ public class PostResource {
 			System.out.print("Erro ao salvar post: " + e.getMessage());
 			return ResponseEntity.internalServerError().build();
 		}
+	}
+	
+	@GetMapping("/{id}/imagem/user")
+	public ResponseEntity<byte[]> getUserImagem(@PathVariable String id) {
+		Post post = service.findById(id);
+
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image.jpg\"").body(post.getImageUser());
+	}
+	
+	@GetMapping("/{id}/imagem/animal")
+	public ResponseEntity<byte[]> getAnimalImagem(@PathVariable String id) {
+		Post post = service.findById(id);
+
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image.jpg\"").body(post.getImageAnimal());
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable String id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<Void> update(@RequestBody Post post, @PathVariable String id) {
+		post = service.update(post, id);
+		return ResponseEntity.noContent().build();
 	}
 }

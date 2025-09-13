@@ -15,6 +15,7 @@ import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.repository.PostRepository;
+import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
 @Service
 public class PostService {
@@ -25,8 +26,9 @@ public class PostService {
 		return repository.findAll();
 	}
 	
-	public Optional<Post> findById(String id) {
-		return repository.findById(id);
+	public Post findById(String id) {
+		Optional<Post> obj = repository.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
 	public Post savePost(String title, Animal animal, GenericUser user, MultipartFile animalImage) throws IOException {
@@ -36,4 +38,32 @@ public class PostService {
 		
 		return repository.save(post);
 	}
+	
+	public void delete(String id) {
+		repository.deleteById(id);
+	}
+	
+	public Post update(Post newObj, String id) {
+		Post inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		partialUpdate(inicialObj, newObj);
+		return repository.save(inicialObj);   
+	}
+	
+	private void partialUpdate(Post inicialObj, Post newObj) {	
+		    if (newObj.getTitle() != null) {
+				inicialObj.setTitle(newObj.getTitle());
+		    }
+		    if (newObj.getAuthor() != null) {
+				inicialObj.setAuthor(newObj.getAuthor());		
+			}
+		    if (newObj.getAnimalDTO() != null) {
+				inicialObj.setAnimalDTO(newObj.getAnimalDTO());
+		    }
+		    if (newObj.getImageUser() != null) {
+				inicialObj.setImageUser(newObj.getImageUser());
+		    }
+		    if (newObj.getImageAnimal() != null) {
+				inicialObj.setImageAnimal(newObj.getImageAnimal());
+		    }
+		}
 }
