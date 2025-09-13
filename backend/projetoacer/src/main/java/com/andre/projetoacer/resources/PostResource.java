@@ -25,7 +25,6 @@ import com.andre.projetoacer.DTO.PostDTO;
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
-import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -33,12 +32,16 @@ import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.services.AnimalService;
 import com.andre.projetoacer.services.PostService;
+import com.andre.projetoacer.services.UserService;
 
 @RestController
 @RequestMapping(value="/posts")
 public class PostResource {
 	@Autowired
 	private PostService service;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private AnimalService animalService;
@@ -64,11 +67,12 @@ public class PostResource {
 		@RequestParam("species") Species species, @RequestParam("size") Size size,
 		@RequestParam("type") Type type,  @RequestParam("race") Race race,
 		@RequestParam("description") String description, @RequestParam("title") String title,
+		@RequestParam("userId") String userId,
 		@RequestParam("image") MultipartFile image) {
 		
 	    try {
 	    	Animal animal = animalService.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
-	    	GenericUser user = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", 20); // chamada para o UserService
+	    	GenericUser user = userService.findById(userId);
 	    	Post post = service.savePost(title, animal, user, image);
 	        	        
 	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(post.getId())
