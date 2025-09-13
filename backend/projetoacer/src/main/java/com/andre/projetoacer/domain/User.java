@@ -8,7 +8,8 @@ public class User extends GenericUser{
 	private String secondName;
 	private String cpf;
 	private Integer age;
-	
+	private byte[] image;
+
 	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Integer age) {
 		super(name, email, phoneNumber, password, adress);
 		this.secondName = secondName;
@@ -39,4 +40,13 @@ public class User extends GenericUser{
 	public void setAge(Integer age) {
 		this.age = age;
 	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
 }
