@@ -35,7 +35,7 @@ public class Instantiation implements CommandLineRunner{
 		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, Race.D_LABRADOR_RETRIEVER, "descricao");
 		animalRepositoty.saveAll(Arrays.asList(animal1, animal2));
 		
-		User user = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", 20);
+		User user = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", 20, null);
 		postRepositoty.deleteAll();
 		Post post1 = new Post(new Date(), "Estou colocando esse animal para adoção", new AuthorDTO(user), new AnimalDTO(animal1));
 		postRepositoty.saveAll(Arrays.asList(post1));
