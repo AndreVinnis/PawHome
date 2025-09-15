@@ -77,5 +77,5 @@ public class AnimalService {
 		    if (race != null) {
 				inicialObj.setRace(race);
 		    }
-		}
+	}
 }

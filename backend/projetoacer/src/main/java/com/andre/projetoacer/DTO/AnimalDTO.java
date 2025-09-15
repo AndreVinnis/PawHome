@@ -27,7 +27,6 @@ public class AnimalDTO implements Serializable{
 		sex = animal.getSex();
 		type = animal.getType();
 		isAdopted = animal.getIsAdopted();
-		//imagemUrl = animal.imagemFilePath();
 	}
 	
 	public String getAnimalId() {

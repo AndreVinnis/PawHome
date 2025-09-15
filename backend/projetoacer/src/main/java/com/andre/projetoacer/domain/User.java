@@ -8,7 +8,7 @@ public class User extends GenericUser{
 	private String secondName;
 	private String cpf;
 	private Integer age;
-	
+
 	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Integer age) {
 		super(name, email, phoneNumber, password, adress);
 		this.secondName = secondName;
