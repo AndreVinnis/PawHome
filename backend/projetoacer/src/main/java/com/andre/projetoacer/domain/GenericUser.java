@@ -97,7 +97,7 @@ public abstract class GenericUser implements Serializable {
 	public String imagemFilePath() {
 		String imagemUrl = ServletUriComponentsBuilder
      	        .fromCurrentContextPath()
-     	        .path("/posts/") //tlz dê erro (com certeza vai)
+     	        .path("/posts/")
      	        .path(id)
      	        .path("/image")
      	        .toUriString();

@@ -72,7 +72,7 @@ public class UserService {
 }
     
     public User saveUser(User user, MultipartFile image) throws IOException {
-    user.setImage(image.getBytes());
+    user.setImagem(image.getBytes());
     return repository.save(user);
 	}
 
