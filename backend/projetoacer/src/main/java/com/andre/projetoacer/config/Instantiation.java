@@ -39,8 +39,8 @@ public class Instantiation implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		animalRepositoty.deleteAll();
-		Animal animal1 = new Animal("Rex", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, Race.D_PASTOR_ALEMAO, "descricao");
-		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STREET, Race.D_LABRADOR_RETRIEVER, "descricao");
+		Animal animal1 = new Animal("Rex", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STRAY, Race.D_PASTOR_ALEMAO, "descricao");
+		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.DOMESTIC, Race.D_LABRADOR_RETRIEVER, "descricao");
 		animalRepositoty.saveAll(Arrays.asList(animal1, animal2));
 		
 		userRepository.deleteAll();

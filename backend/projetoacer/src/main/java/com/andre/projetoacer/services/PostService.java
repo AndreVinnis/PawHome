@@ -2,6 +2,7 @@ package com.andre.projetoacer.services;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import com.andre.projetoacer.DTO.AuthorDTO;
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
+import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.repository.PostRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
@@ -65,5 +67,29 @@ public class PostService {
 		    if (newObj.getImageAnimal() != null) {
 				inicialObj.setImageAnimal(newObj.getImageAnimal());
 		    }
+	}
+	
+	public List<Post> getStrays(){
+		List<Post> animals = findAll();
+		List<Post> strays = new LinkedList<>();
+		
+		for(Post x: animals) {
+			if(x.getAnimalDTO().getType() == Type.STRAY) {
+				strays.add(x);			
+			}
+		}	
+		return strays;
+	}
+	
+	public List<Post> getDomesticAnimals(){
+		List<Post> animals = findAll();
+		List<Post> pets = new LinkedList<>();
+		
+		for(Post x: animals) {
+			if(x.getAnimalDTO().getType() == Type.DOMESTIC) {
+				pets.add(x);			
+			}
 		}
+		return pets;
+	}
 }

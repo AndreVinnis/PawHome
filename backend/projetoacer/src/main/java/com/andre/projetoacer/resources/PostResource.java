@@ -119,4 +119,18 @@ public class PostResource {
 		post = service.update(post, id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping("/strays")
+	public ResponseEntity<List<PostDTO>> getStrays(){
+		List<Post> list = service.getStrays();
+		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());	
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
+	@GetMapping("/domestic")
+	public ResponseEntity<List<PostDTO>> getDomesticAnimals(){
+		List<Post> list = service.getDomesticAnimals();
+		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());	
+		return ResponseEntity.ok().body(listDTO);
+	}
 }
