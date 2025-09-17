@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.andre.projetoacer.domain.Animal;
+import com.andre.projetoacer.enums.Race;
+import com.andre.projetoacer.enums.Sex;
+import com.andre.projetoacer.enums.Size;
+import com.andre.projetoacer.enums.Species;
+import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.repository.AnimalRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
@@ -32,45 +37,45 @@ public class AnimalService {
     }
 	
 	public void delete(String id) {
+		findById(id);
 		repository.deleteById(id);
 	}
 	
-	public Animal update(Animal newObj, String id) {
+	public Animal update(String name, Integer age, Double weight, Sex sex,
+			Species species, Size size,	Type type, Race race, String description, String id) {
 		Animal inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
-		partialUpdate(inicialObj, newObj);
+		partialUpdate(inicialObj, name, age, weight, sex, species, size, type, race, description);
 		return repository.save(inicialObj);   
 	}
 	
-	private void partialUpdate(Animal inicialObj, Animal newObj) {	
-		    if (newObj.getName() != null) {
-				inicialObj.setName(newObj.getName());
+	private void partialUpdate(Animal inicialObj, String name, Integer age, Double weight, Sex sex,
+			Species species, Size size,	Type type, Race race, String description) {	
+		    if (name != null) {
+				inicialObj.setName(name);
 		    }
-		    if (newObj.getAge() != null) {
-				inicialObj.setAge(newObj.getAge());
+		    if (age != null) {
+				inicialObj.setAge(age);
 		    }
-		    if (newObj.getWeight() != null) {
-				inicialObj.setWeight(newObj.getWeight());
+		    if (weight != null) {
+				inicialObj.setWeight(weight);
 		    }
-		    if (newObj.getSex() != null) {
-				inicialObj.setSex(newObj.getSex());
+		    if (sex != null) {
+				inicialObj.setSex(sex);
 		    }
-		    if (newObj.getSpecies() != null) {
-				inicialObj.setSpecies(newObj.getSpecies());
+		    if (species != null) {
+				inicialObj.setSpecies(species);
 		    }
-		    if (newObj.getSize() != null) {
-				inicialObj.setSize(newObj.getSize());
+		    if (size != null) {
+				inicialObj.setSize(size);
 		    }
-		    if (newObj.getType() != null) {
-				inicialObj.setType(newObj.getType());
+		    if (type != null) {
+				inicialObj.setType(type);
 		    }
-		    if (newObj.getIsAdopted() != null) {
-				inicialObj.setIsAdopted(newObj.getIsAdopted());
+		    if (description != null) {
+				inicialObj.setDescription(description);
 		    }
-		    if (newObj.getDescription() != null) {
-				inicialObj.setDescription(newObj.getDescription());
+		    if (race != null) {
+				inicialObj.setRace(race);
 		    }
-		    if (newObj.getRace() != null) {
-				inicialObj.setRace(newObj.getRace());
-		    }
-		}
+	}
 }

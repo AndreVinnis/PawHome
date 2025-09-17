@@ -20,10 +20,8 @@ public class MedicalRecords implements Serializable{
 	private List<PetDisease> diseases = new LinkedList<>();
 	private List<PetMedication> medications = new LinkedList<>();
 	
-	public MedicalRecords(List<PetDisease> diseases, List<PetMedication> medications) {
+	public MedicalRecords() {
 		super();
-		this.diseases = diseases;
-		this.medications = medications;
 	}
 
 	public String getId() {

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,12 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.domain.Animal;
+import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
 import com.andre.projetoacer.enums.Species;
 import com.andre.projetoacer.enums.Type;
-import com.andre.projetoacer.enums.Race;
-
 import com.andre.projetoacer.services.AnimalService;
 
 @RestController
@@ -84,8 +82,12 @@ public class AnimalResource {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody Animal newAnimal, @PathVariable String id) {
-		newAnimal = service.update(newAnimal, id);
+	public ResponseEntity<Void> update(@RequestParam String name, @RequestParam Integer age,
+			@RequestParam Double weight, @RequestParam Sex sex,
+			@RequestParam Species species, @RequestParam Size size,
+			@RequestParam Type type,  @RequestParam Race race,
+			@RequestParam String description, @PathVariable String id) {
+		service.update(name, age, weight, sex, species, size, type, race, description, id);
 		return ResponseEntity.noContent().build();
 	}
 }

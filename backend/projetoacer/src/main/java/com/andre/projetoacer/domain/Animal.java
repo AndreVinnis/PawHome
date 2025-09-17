@@ -31,6 +31,7 @@ public class Animal implements Serializable {
 	private Boolean isAdopted;
 	private String description;
 	private Race race;
+	private MedicalRecords medicalRecords;
 
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
@@ -51,6 +52,7 @@ public class Animal implements Serializable {
 		this.race = race;
 		this.description = description;
 		isAdopted = false;
+		medicalRecords = new MedicalRecords();
 	}
 
 	public String getId() {
@@ -141,6 +143,14 @@ public class Animal implements Serializable {
 		this.description = description;
 	}
 	
+	public MedicalRecords getMedicalRecords() {
+		return medicalRecords;
+	}
+
+	public void setMedicalRecords(MedicalRecords medicalRecords) {
+		this.medicalRecords = medicalRecords;
+	}
+
 	public byte[] getImage() {
 		return image;
 	}
