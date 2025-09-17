@@ -44,7 +44,7 @@ public class Instantiation implements CommandLineRunner{
 		animalRepositoty.saveAll(Arrays.asList(animal1, animal2));
 		
 		userRepository.deleteAll();
-		User user1 = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", 20);
+		User user1 = new User("André", "andre@gmail.com" , "83 979484894", "senha", null, "Macambira", "97949494949", new Date());
 		userRepository.saveAll(Arrays.asList(user1));
 		
 		postRepositoty.deleteAll();

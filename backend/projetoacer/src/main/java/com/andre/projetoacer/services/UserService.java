@@ -25,8 +25,13 @@ public class UserService {
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("User not found"));
     }
+    
+    public User saveUser(User user, MultipartFile image) throws IOException {
+	    user.setImagem(image.getBytes());
+	    return repository.save(user);
+	}
 
-    public User insert(User user) {
+    public User updateListPosts(User user) {
         return repository.save(user);
     }   
 
@@ -60,20 +65,15 @@ public class UserService {
         if (newUser.getCpf() != null) {
             originalUser.setCpf(newUser.getCpf());
         }
-        if (newUser.getAge() != null) {
-            originalUser.setAge(newUser.getAge());
+        if (newUser.getBirthDate() != null) {
+            originalUser.setBirthDate(newUser.getBirthDate());
         }
     }
 
     public void delete(String id) {
-    repository.findById(id)
-        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
-    repository.deleteById(id);
-}
-    
-    public User saveUser(User user, MultipartFile image) throws IOException {
-    user.setImagem(image.getBytes());
-    return repository.save(user);
-	}
+	    repository.findById(id)
+	        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+	    repository.deleteById(id);
+    }
 
 }

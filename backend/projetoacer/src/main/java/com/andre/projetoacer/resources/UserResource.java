@@ -1,5 +1,6 @@
 package com.andre.projetoacer.resources;
 
+import java.io.IOException;
 import java.net.URI; 
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@RequestBody User user) {
-        user = service.insert(user);
+    public ResponseEntity<Void> insert(@RequestBody User user) throws IOException {
+        user = service.saveUser(user, null);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }

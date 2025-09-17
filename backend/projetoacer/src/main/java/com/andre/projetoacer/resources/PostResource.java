@@ -25,6 +25,7 @@ import com.andre.projetoacer.DTO.PostDTO;
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
+import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -33,6 +34,7 @@ import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.services.AnimalService;
 import com.andre.projetoacer.services.PostService;
 import com.andre.projetoacer.services.UserService;
+import com.andre.projetoacer.util.PostUpdater;
 
 @RestController
 @RequestMapping(value="/posts")
@@ -45,6 +47,9 @@ public class PostResource {
 	
 	@Autowired
 	private AnimalService animalService;
+	
+	@Autowired
+	private PostUpdater postUpdater;
 	
 	
 	@GetMapping
@@ -77,7 +82,9 @@ public class PostResource {
 	        	        
 	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(post.getId())
 					.toUri();
-
+	    	
+	    	postUpdater.updateListPosts(user, post);
+	    	userService.updateListPosts((User) user);
 			return ResponseEntity.created(uri).build();
 		} catch (IOException e) {
 			System.out.print("Erro ao salvar post: " + e.getMessage());

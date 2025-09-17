@@ -1,9 +1,12 @@
 package com.andre.projetoacer.domain;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,6 +24,9 @@ public abstract class GenericUser implements Serializable {
 	private String password;
 	
 	private Adress adress;
+	
+	@DBRef(lazy = true)
+	private List<Post> posts = new LinkedList<>();
 	
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
@@ -84,6 +90,10 @@ public abstract class GenericUser implements Serializable {
 
 	public void setAdress(Adress adress) {
 		this.adress = adress;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
 	}
 	
 	public byte[] getImage() {

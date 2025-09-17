@@ -1,5 +1,7 @@
 package com.andre.projetoacer.domain;
 
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -7,13 +9,13 @@ public class User extends GenericUser{
 	private static final long serialVersionUID = 1L;
 	private String secondName;
 	private String cpf;
-	private Integer age;
+	private Date birthDate;
 
-	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Integer age) {
+	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Date birthDate) {
 		super(name, email, phoneNumber, password, adress);
 		this.secondName = secondName;
 		this.cpf = cpf;
-		this.age = age;
+		this.birthDate = birthDate;
 	}
 
 	public String getSecondName() {
@@ -32,11 +34,11 @@ public class User extends GenericUser{
 		this.cpf = cpf;
 	}
 
-	public Integer getAge() {
-		return age;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 }
