@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.domain.Animal;
+import com.andre.projetoacer.enums.PetDisease;
+import com.andre.projetoacer.enums.PetMedication;
 import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -88,6 +90,19 @@ public class AnimalResource {
 			@RequestParam Type type,  @RequestParam Race race,
 			@RequestParam String description, @PathVariable String id) {
 		service.update(name, age, weight, sex, species, size, type, race, description, id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PatchMapping("/{id}/medrecords")
+	public ResponseEntity<Void> updateMedicalRecords(
+			@RequestParam String diseases, 
+			@RequestParam String medications,
+			@PathVariable String id){
+		
+		List<PetDisease> diseasesList = service.enumListPetDisease(diseases); 
+		List<PetMedication> medicationsList = service.enumListPetMedication(medications);
+		
+		service.updateMedicalRecords(diseasesList, medicationsList, id);
 		return ResponseEntity.noContent().build();
 	}
 }

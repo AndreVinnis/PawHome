@@ -1,14 +1,18 @@
 package com.andre.projetoacer.services;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.andre.projetoacer.domain.Animal;
+import com.andre.projetoacer.enums.PetDisease;
+import com.andre.projetoacer.enums.PetMedication;
 import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -77,5 +81,36 @@ public class AnimalService {
 		    if (race != null) {
 				inicialObj.setRace(race);
 		    }
+	}
+	
+	public Animal updateMedicalRecords(List<PetDisease> diseases, List<PetMedication> medications, String id) {
+		Animal obj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		updateParcialMedicalRecords(obj, diseases, medications);
+		return repository.save(obj);
+	}
+	
+	private void updateParcialMedicalRecords(Animal obj, List<PetDisease> diseases, List<PetMedication> medications) {
+		if(!diseases.isEmpty()) {
+			obj.getMedicalRecords().setDiseases(diseases);
+		}
+		if(!medications.isEmpty()) {
+			obj.getMedicalRecords().setMedications(medications);
+		}
+	}
+	
+	public List<PetDisease> enumListPetDisease(String diseases) {
+		List<PetDisease> diseasesList = Arrays.stream(diseases.split(","))
+                .map(String::toUpperCase)
+                .map(PetDisease::valueOf)
+                .collect(Collectors.toList());
+		return diseasesList;
+	}
+
+	public List<PetMedication> enumListPetMedication(String medications) {
+		List<PetMedication> medicationsList = Arrays.stream(medications.split(","))
+                .map(String::toUpperCase)
+                .map(PetMedication::valueOf)
+                .collect(Collectors.toList());
+		return medicationsList;
 	}
 }
