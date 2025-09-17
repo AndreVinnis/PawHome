@@ -31,9 +31,6 @@ public abstract class GenericUser implements Serializable {
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
 	
-	public GenericUser() {
-		
-	}
 
 	public GenericUser(String name, String email, String phoneNumber, String password, Adress adress) {
 		super();

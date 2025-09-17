@@ -17,7 +17,7 @@ public class User extends GenericUser{
 		this.cpf = cpf;
 		this.birthDate = birthDate;
 	}
-
+	
 	public String getSecondName() {
 		return secondName;
 	}

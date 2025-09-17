@@ -55,7 +55,7 @@ public class PostResource {
 	@GetMapping
 	public ResponseEntity<List<PostDTO>> findAll(){
 		List<Post> list = service.findAll();
-		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());
+		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());	
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
