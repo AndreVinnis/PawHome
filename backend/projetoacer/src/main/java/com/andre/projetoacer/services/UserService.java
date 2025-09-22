@@ -7,9 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-//import com.andre.projetoacer.domain.GenericUser;
-import com.andre.projetoacer.domain.User;
 
+import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.repository.UserRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
@@ -75,5 +74,12 @@ public class UserService {
 	        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 	    repository.deleteById(id);
     }
+
+    public User updateImage(String id, MultipartFile image) throws IOException {
+    User user = findById(id);
+    user.setImagem(image.getBytes());
+    return repository.save(user);
+    }
+
 
 }
