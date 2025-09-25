@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Adress implements Serializable {
+public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,11 +19,11 @@ public class Adress implements Serializable {
 	private Integer number;
 	private String referencePoint;
 	
-	public Adress() {
+	public Address() {
 		
 	}
 
-	public Adress(String cep, String city, String neighborhood, Integer number, String referencePoint) {
+	public Address(String cep, String city, String neighborhood, Integer number, String referencePoint) {
 		super();
 		this.cep = cep;
 		this.city = city;
@@ -85,7 +85,7 @@ public class Adress implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Adress other = (Adress) obj;
+		Address other = (Address) obj;
 		return Objects.equals(cep, other.cep) && Objects.equals(number, other.number);
 	}
 }

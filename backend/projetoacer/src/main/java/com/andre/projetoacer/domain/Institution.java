@@ -11,8 +11,8 @@ public class Institution extends GenericUser{
 	private String description;
 	private Date createDate;
 	
-	public Institution(String name, String email, String phoneNumber, String password, Adress adress, String cnpj, String description, Date createDate) {
-		super(name, email, phoneNumber, password, adress);
+	public Institution(String name, String email, String phoneNumber, String password, Address address, String cnpj, String description, Date createDate) {
+		super(name, email, phoneNumber, password, address);
 		this.cnpj = cnpj;
 		this.description = description;
 		this.createDate = createDate;
@@ -37,4 +37,8 @@ public class Institution extends GenericUser{
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	
+	
+
+	
 }

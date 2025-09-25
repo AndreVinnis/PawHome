@@ -55,8 +55,8 @@ public class UserService {
         if (newUser.getPassword() != null) {
             originalUser.setPassword(newUser.getPassword());
         }
-        if (newUser.getAdress() != null) {
-            originalUser.setAdress(newUser.getAdress());
+        if (newUser.getAddress() != null) {
+            originalUser.setAddress(newUser.getAddress());
         }
         if (newUser.getSecondName() != null) {
             originalUser.setSecondName(newUser.getSecondName());

@@ -11,8 +11,8 @@ public class User extends GenericUser{
 	private String cpf;
 	private Date birthDate;
 
-	public User(String name, String email, String phoneNumber, String password, Adress adress, String secondName, String cpf, Date birthDate) {
-		super(name, email, phoneNumber, password, adress);
+	public User(String name, String email, String phoneNumber, String password, Address address, String secondName, String cpf, Date birthDate) {
+		super(name, email, phoneNumber, password, address);
 		this.secondName = secondName;
 		this.cpf = cpf;
 		this.birthDate = birthDate;

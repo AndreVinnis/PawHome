@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.andre.projetoacer.domain.Adress;
+import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.services.UserService;
 
@@ -55,9 +55,9 @@ public class UserResource {
 	    @RequestParam("referencePoint") String referencePoint
 	) {
 	    try {
-	        Adress adressObj = new Adress(cep, city, neighborhood, houseNumber, referencePoint);
-	
-	        User user = new User(name, email, phoneNumber, password, adressObj, secondName, cpf, birthDate);
+	        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
+
+	        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
 	        user = service.saveUser(user, null);
 	
 	        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
@@ -71,7 +71,7 @@ public class UserResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
-     return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/imagem")
@@ -95,8 +95,8 @@ public class UserResource {
             @RequestParam String cep, @RequestParam String city,
             @RequestParam String neighborhood, @RequestParam Integer houseNumber,
             @RequestParam String referencePoint) {
-        Adress adressObj = new Adress(cep, city, neighborhood, houseNumber, referencePoint);
-        User user = new User(name, email, phoneNumber, password, adressObj, secondName, cpf, birthDate);
+        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
+        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
         user.setId(id);
         service.update(id, user);
         return ResponseEntity.noContent().build();

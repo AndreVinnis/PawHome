@@ -23,7 +23,7 @@ public abstract class GenericUser implements Serializable {
 	private String phoneNumber;
 	private String password;
 	
-	private Adress adress;
+	private Address address;
 	
 	@DBRef(lazy = true)
 	private List<Post> posts = new LinkedList<>();
@@ -32,13 +32,13 @@ public abstract class GenericUser implements Serializable {
 	private byte[] image;
 	
 
-	public GenericUser(String name, String email, String phoneNumber, String password, Adress adress) {
+	public GenericUser(String name, String email, String phoneNumber, String password, Address address) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.password = password;
-		this.adress = adress;
+		this.address = address;
 	}
 
 	public String getId() {
@@ -81,12 +81,12 @@ public abstract class GenericUser implements Serializable {
 		this.password = password;
 	}
 	
-	public Adress getAdress() {
-		return adress;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdress(Adress adress) {
-		this.adress = adress;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 	
 	public List<Post> getPosts() {

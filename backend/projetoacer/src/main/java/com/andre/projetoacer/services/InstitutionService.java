@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.andre.projetoacer.domain.Institution;
-//import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.repository.InstitutionRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
@@ -60,8 +59,8 @@ public class InstitutionService {
         if (newInstitution.getPassword() != null) {
             originalInstitution.setPassword(newInstitution.getPassword());
         }
-        if (newInstitution.getAdress() != null) {
-            originalInstitution.setAdress(newInstitution.getAdress());
+        if (newInstitution.getAddress() != null) {
+            originalInstitution.setAddress(newInstitution.getAddress());
         }
         if (newInstitution.getCnpj() != null) {
             originalInstitution.setCnpj(newInstitution.getCnpj());
