@@ -33,12 +33,17 @@ public class PostService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
-	public Post savePost(String title, Animal animal, GenericUser user, MultipartFile animalImage) throws IOException {
-		Post post = new Post(new Date(), title, new AuthorDTO(user), new AnimalDTO(animal));
-		post.setImageAnimal(animalImage.getBytes());
-		//post.setImageUser(user.getImage());
-		
-		return repository.save(post);
+	public Post savePost(String title, Animal animal, GenericUser user, MultipartFile animalImage) {
+		try{
+            Post post = new Post(new Date(), title, new AuthorDTO(user), new AnimalDTO(animal));
+            post.setImageAnimal(animalImage.getBytes());
+            post.setImageUser(user.getImage());
+
+            return repository.save(post);
+        }
+        catch (IOException e){
+            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
+        }
 	}
 	
 	public void delete(String id) {

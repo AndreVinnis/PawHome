@@ -5,6 +5,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.andre.projetoacer.domain.*;
+import com.andre.projetoacer.services.InstitutionService;
+import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,10 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andre.projetoacer.DTO.PostDTO;
-import com.andre.projetoacer.domain.Animal;
-import com.andre.projetoacer.domain.GenericUser;
-import com.andre.projetoacer.domain.Post;
-import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.Race;
 import com.andre.projetoacer.enums.Sex;
 import com.andre.projetoacer.enums.Size;
@@ -44,6 +43,9 @@ public class PostResource {
 	
 	@Autowired
 	private UserService userService;
+
+    @Autowired
+    private InstitutionService institutionService;
 	
 	@Autowired
 	private AnimalService animalService;
@@ -75,21 +77,29 @@ public class PostResource {
 		@RequestParam("userId") String userId,
 		@RequestParam("image") MultipartFile image) {
 		
-	    try {
-	    	Animal animal = animalService.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
-	    	GenericUser user = userService.findById(userId);
-	    	Post post = service.savePost(title, animal, user, image);
-	        	        
-	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(post.getId())
-					.toUri();
+
+        Animal animal = animalService.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
+        GenericUser user;
+
+        try{
+            user = userService.findById(userId);
+        }catch(ObjectNotFoundException e){
+            user = institutionService.findById(userId);
+        }
+
+        Post post = service.savePost(title, animal, user, image);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
 	    	
-	    	postUpdater.updateListPosts(user, post);
-	    	userService.updateListPosts((User) user);
-			return ResponseEntity.created(uri).build();
-		} catch (IOException e) {
-			System.out.print("Erro ao salvar post: " + e.getMessage());
-			return ResponseEntity.internalServerError().build();
-		}
+        postUpdater.updateListPosts(user, post);
+
+        if(user instanceof User){
+            userService.updateListPosts((User) user);
+        }else{
+            institutionService.updateListPosts((Institution) user);
+        }
+
+        return ResponseEntity.created(uri).build();
+
 	}
 	
 	@GetMapping("/{id}/imagem/user")

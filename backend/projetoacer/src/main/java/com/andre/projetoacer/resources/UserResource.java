@@ -54,18 +54,13 @@ public class UserResource {
 	    @RequestParam("neighborhood") String neighborhood, @RequestParam("houseNumber") Integer houseNumber,
 	    @RequestParam("referencePoint") String referencePoint
 	) {
-	    try {
-	        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
+        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
 
-	        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
-	        user = service.saveUser(user, null);
+        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
+        user = service.saveUser(user, image);
 	
-	        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-	        return ResponseEntity.created(uri).build();
-	    } catch (IOException e) {
-	        System.out.print("Error saving user: " + e.getMessage());
-	        return ResponseEntity.internalServerError().build();
-	    }
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+        return ResponseEntity.created(uri).build();
 	}
 
     @DeleteMapping("/{id}")
