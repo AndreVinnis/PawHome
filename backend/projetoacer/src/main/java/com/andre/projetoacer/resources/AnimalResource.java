@@ -55,18 +55,11 @@ public class AnimalResource {
 		@RequestParam("species") Species species, @RequestParam("size") Size size,
 		@RequestParam("type") Type type,  @RequestParam("race") Race race,
 		@RequestParam("description") String description, @RequestParam("image") MultipartFile image) {
-		
-	    try {
-	    	Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
-	        	        
-	    	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
-					.toUri();
 
-			return ResponseEntity.created(uri).build();
-		} catch (IOException e) {
-			System.out.print("Erro ao salvar animal: " + e.getMessage());
-			return ResponseEntity.internalServerError().build();
-		}
+        Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
+	        	        
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
 	}
 	
 	@GetMapping("/{id}/imagem")

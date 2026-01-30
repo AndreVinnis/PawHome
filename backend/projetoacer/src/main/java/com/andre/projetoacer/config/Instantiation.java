@@ -38,6 +38,7 @@ public class Instantiation implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
+        /*
 		animalRepositoty.deleteAll();
 		Animal animal1 = new Animal("Rex", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.STRAY, Race.D_PASTOR_ALEMAO, "descricao");
 		Animal animal2 = new Animal("Lux", 2, 7.5, Sex.MALE, Species.DOG, Size.MEDIUM, Type.DOMESTIC, Race.D_LABRADOR_RETRIEVER, "descricao");
@@ -51,6 +52,7 @@ public class Instantiation implements CommandLineRunner{
 		postRepositoty.deleteAll();
 		Post post1 = new Post(new Date(), "Estou colocando esse animal para adoção", new AuthorDTO(user1), new AnimalDTO(animal1));
 		postRepositoty.saveAll(Arrays.asList(post1));
+         */
 	}
 
 }

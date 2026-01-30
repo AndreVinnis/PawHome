@@ -35,9 +35,13 @@ public class AnimalService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
-	public Animal saveAnimal(Animal animal, MultipartFile image) throws IOException {
-		animal.setImage(image.getBytes());
-        return repository.save(animal);
+	public Animal saveAnimal(Animal animal, MultipartFile image) {
+		try{
+            animal.setImage(image.getBytes());
+            return repository.save(animal);
+        }catch (IOException e){
+            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
+        }
     }
 	
 	public void delete(String id) {

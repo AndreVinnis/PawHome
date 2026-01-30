@@ -23,9 +23,6 @@ import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.Institution;
 import com.andre.projetoacer.services.InstitutionService;
 
-
-
-
 @RestController
 @RequestMapping(value="/institutions")
 public class InstitutionResource {
@@ -33,7 +30,7 @@ public class InstitutionResource {
     @Autowired
     private InstitutionService service;
 
-     @GetMapping
+    @GetMapping
     public ResponseEntity<List<Institution>> findAll() {
         List<Institution> list = service.findAll();
         return ResponseEntity.ok().body(list);
@@ -45,21 +42,15 @@ public class InstitutionResource {
         @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password,
         @RequestParam("cnpj") String cnpj, @RequestParam("description") String description,
         @RequestParam("image") MultipartFile image,@RequestParam("cep") String cep, @RequestParam("city") String city,
-        @RequestParam("neighborhood") Date neighborhood, @RequestParam("houseNumber") Integer houseNumber,
+        @RequestParam("neighborhood") String neighborhood, @RequestParam("houseNumber") Integer houseNumber,
         @RequestParam("referencePoint") String referencePoint
     ) {
-        try {
-            Address addressObj = new Address();
+         Address addressObj = new Address();
 
-            Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null);
-            institution = service.saveInstitution(institution, image);
-
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(institution.getId()).toUri();
-            return ResponseEntity.created(uri).build();
-        } catch (Exception e) {
-            System.out.println("Error saving institution: " + e.getMessage());
-            return ResponseEntity.internalServerError().build();
-        }
+         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null);
+         institution = service.saveInstitution(institution, image);
+         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(institution.getId()).toUri();
+         return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping("/{id}")

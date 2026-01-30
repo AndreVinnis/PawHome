@@ -1,5 +1,6 @@
 package com.andre.projetoacer.services;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +25,13 @@ public class InstitutionService {
         return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
     } 
 
-    public Institution saveInstitution(Institution institution, MultipartFile image) throws Exception {
-        /* 
-        if (repository.existsByEmail(institution.getEmail())) {
-            throw new IllegalArgumentException("E=mail already registered");
+    public Institution saveInstitution(Institution institution, MultipartFile image) {
+        try{
+            institution.setImagem(image.getBytes());
+            return repository.save(institution);
+        }catch (IOException e){
+            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
         }
-        */
-        institution.setImagem(image.getBytes());
-        return repository.save(institution);
     }
 
     public Institution updateListPosts(Institution institution) {
@@ -43,7 +43,7 @@ public class InstitutionService {
         .orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
 
     partialUpdate(originalInstitution, newInstitution);
-    return repository.save(originalInstitution);
+        return repository.save(originalInstitution);
     }
 
     private void partialUpdate(Institution originalInstitution, Institution newInstitution) {

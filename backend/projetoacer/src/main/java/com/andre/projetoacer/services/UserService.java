@@ -25,9 +25,13 @@ public class UserService {
         return obj.orElseThrow(() -> new ObjectNotFoundException("User not found"));
     }
     
-    public User saveUser(User user, MultipartFile image) throws IOException {
-	    user.setImagem(image.getBytes());
-	    return repository.save(user);
+    public User saveUser(User user, MultipartFile image) {
+	    try{
+            user.setImagem(image.getBytes());
+	        return repository.save(user);
+        }catch (IOException e){
+            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
+        }
 	}
 
     public User updateListPosts(User user) {
@@ -35,11 +39,11 @@ public class UserService {
     }   
 
     public User update(String id, User newUser) {
-    User originalUser = repository.findById(id)
-        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        User originalUser = repository.findById(id)
+            .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-    partialUpdate(originalUser, newUser);
-    return repository.save(originalUser);
+        partialUpdate(originalUser, newUser);
+        return repository.save(originalUser);
     }
 
     private void partialUpdate(User originalUser, User newUser) {
@@ -80,6 +84,4 @@ public class UserService {
     user.setImagem(image.getBytes());
     return repository.save(user);
     }
-
-
 }
