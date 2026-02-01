@@ -1,9 +1,12 @@
 package com.andre.projetoacer.resources;
 
 import java.net.URI;
-import java.sql.Date;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.andre.projetoacer.DTO.PostDTO;
+import com.andre.projetoacer.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.Institution;
 import com.andre.projetoacer.services.InstitutionService;
@@ -36,6 +38,22 @@ public class InstitutionResource {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Institution> findById(@PathVariable String id){
+        Institution institution = service.findById(id);
+        return ResponseEntity.ok().body(institution);
+    }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<List<PostDTO>> findInstitutionPosts(@PathVariable String id){
+        Institution institution = service.findById(id);
+        List<PostDTO> posts = new LinkedList<>();
+        for(Post post : institution.getPosts()){
+            posts.add(new PostDTO(post));
+        }
+        return ResponseEntity.ok().body(posts);
+    }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> insert(
         @RequestParam("name") String name, @RequestParam("email") String email,
@@ -45,9 +63,9 @@ public class InstitutionResource {
         @RequestParam("neighborhood") String neighborhood, @RequestParam("houseNumber") Integer houseNumber,
         @RequestParam("referencePoint") String referencePoint
     ) {
-         Address addressObj = new Address();
+         Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
 
-         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null);
+         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, new Date());
          institution = service.saveInstitution(institution, image);
          URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(institution.getId()).toUri();
          return ResponseEntity.created(uri).build();
@@ -69,7 +87,6 @@ public class InstitutionResource {
             .contentType(MediaType.IMAGE_JPEG)
             .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image.jpg\"")
             .body(institution.getImage());
-
     }
 
     @PatchMapping("/{id}")
@@ -78,14 +95,13 @@ public class InstitutionResource {
         @RequestParam String email, @RequestParam String phoneNumber,
         @RequestParam String password, @RequestParam String cnpj,
         @RequestParam String description, @RequestParam String cep,
-        @RequestParam String city, @RequestParam Date neighborhood,
+        @RequestParam String city, @RequestParam String neighborhood,
         @RequestParam Integer houseNumber, @RequestParam String referencePoint) {
 
-        Address addressObj = new Address();
+        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null);
         institution.setId(id);
         service.update(id, institution);
         return ResponseEntity.noContent().build();
     }
-
 }
