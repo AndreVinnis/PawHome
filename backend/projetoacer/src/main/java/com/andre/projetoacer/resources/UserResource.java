@@ -1,6 +1,5 @@
 package com.andre.projetoacer.resources;
 
-import java.io.IOException;
 import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import java.util.Date;
