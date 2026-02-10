@@ -1,27 +1,21 @@
 package com.andre.projetoacer.resources;
 
-import java.net.URI;
+import com.andre.projetoacer.DTO.MessageResponse;
+import com.andre.projetoacer.DTO.user.UserCreationDTO;
 import org.springframework.http.HttpHeaders;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.services.UserService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value="/users")
@@ -29,7 +23,6 @@ public class UserResource {
 
     @Autowired
     private UserService service;
-    
 
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
@@ -43,24 +36,17 @@ public class UserResource {
         return ResponseEntity.ok().body(user);
     }
     
-	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> insert(
-	    @RequestParam("name") String name, @RequestParam("email") String email,
-	    @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password,
-	    @RequestParam("secondName") String secondName, @RequestParam("cpf") String cpf,
-	    @RequestParam("birthDate") Date birthDate, @RequestParam("image") MultipartFile image,
-	    @RequestParam("cep") String cep, @RequestParam("city") String city,
-	    @RequestParam("neighborhood") String neighborhood, @RequestParam("houseNumber") Integer houseNumber,
-	    @RequestParam("referencePoint") String referencePoint
-	) {
-        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-
-        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
-        user = service.saveUser(user, image);
-	
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+	@PostMapping
+	public ResponseEntity<MessageResponse> insert(@RequestBody UserCreationDTO newUser) {
+        service.saveUser(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
 	}
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        service.uploadUserImage(id, file);
+        return ResponseEntity.noContent().build();
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {

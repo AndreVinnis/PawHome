@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -26,6 +27,7 @@ public abstract class GenericUser implements Serializable {
 	private Address address;
 	
 	@DBRef(lazy = true)
+    @JsonIgnore
 	private List<Post> posts = new LinkedList<>();
 	
 	@Field(targetType = FieldType.BINARY)
@@ -41,7 +43,10 @@ public abstract class GenericUser implements Serializable {
 		this.address = address;
 	}
 
-	public String getId() {
+    public GenericUser() {
+    }
+
+    public String getId() {
 		return id;
 	}
 
