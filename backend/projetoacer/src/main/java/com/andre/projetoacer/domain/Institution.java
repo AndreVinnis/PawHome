@@ -2,6 +2,7 @@ package com.andre.projetoacer.domain;
 
 import java.util.Date;
 
+import com.andre.projetoacer.enums.UserRole;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -11,8 +12,8 @@ public class Institution extends GenericUser{
 	private String description;
 	private Date createDate;
 	
-	public Institution(String name, String email, String phoneNumber, String password, Address address, String cnpj, String description, Date createDate) {
-		super(name, email, phoneNumber, password, address);
+	public Institution(String name, String email, String phoneNumber, String password, Address address, String cnpj, String description, Date createDate, UserRole role) {
+		super(name, email, phoneNumber, password, address, role);
 		this.cnpj = cnpj;
 		this.description = description;
 		this.createDate = createDate;

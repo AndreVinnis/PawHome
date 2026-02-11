@@ -1,18 +1,23 @@
 package com.andre.projetoacer.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import com.andre.projetoacer.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-public abstract class GenericUser implements Serializable {
+public abstract class GenericUser implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,15 +37,17 @@ public abstract class GenericUser implements Serializable {
 	
 	@Field(targetType = FieldType.BINARY)
 	private byte[] image;
-	
 
-	public GenericUser(String name, String email, String phoneNumber, String password, Address address) {
+    private UserRole role;
+
+    public GenericUser(String name, String email, String phoneNumber, String password, Address address, UserRole role) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.password = password;
 		this.address = address;
+        this.role = role;
 	}
 
     public GenericUser() {
@@ -105,6 +112,14 @@ public abstract class GenericUser implements Serializable {
 	public void setImagem(byte[] image) {
 		this.image = image;
 	}
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 	
 	public String imagemFilePath() {
 		String imagemUrl = ServletUriComponentsBuilder
@@ -132,4 +147,19 @@ public abstract class GenericUser implements Serializable {
 		GenericUser other = (GenericUser) obj;
 		return Objects.equals(id, other.id);
 	}
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UserRole.ADMIN){
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        else{
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
 }

@@ -1,7 +1,10 @@
 package com.andre.projetoacer.resources;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.andre.projetoacer.DTO.MessageResponse;
 import com.andre.projetoacer.DTO.user.UserCreationDTO;
+import com.andre.projetoacer.enums.UserRole;
+import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.springframework.http.HttpHeaders;
 import java.util.Date;
 import java.util.List;
@@ -36,11 +39,29 @@ public class UserResource {
         return ResponseEntity.ok().body(user);
     }
     
-	@PostMapping
-	public ResponseEntity<MessageResponse> insert(@RequestBody UserCreationDTO newUser) {
-        service.saveUser(newUser);
+	@PostMapping("/normal")
+	public ResponseEntity<MessageResponse> insertNormalUser(@RequestBody UserCreationDTO newUser) {
+        try{
+            service.findByEmail(newUser.email());
+        }
+        catch(ObjectNotFoundException ex){
+            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
+        }
+        service.saveUser(newUser, UserRole.USER);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
 	}
+
+    @PostMapping("/admin")
+    public ResponseEntity<MessageResponse> insertAdminUser(@RequestBody UserCreationDTO newUser) {
+        try{
+            service.findByEmail(newUser.email());
+            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
+        }
+        catch(ObjectNotFoundException ex){
+            service.saveUser(newUser, UserRole.ADMIN);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        }
+    }
 
     @PostMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
@@ -76,7 +97,7 @@ public class UserResource {
             @RequestParam String neighborhood, @RequestParam Integer houseNumber,
             @RequestParam String referencePoint) {
         Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate);
+        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate, UserRole.USER);
         user.setId(id);
         service.update(id, user);
         return ResponseEntity.noContent().build();
