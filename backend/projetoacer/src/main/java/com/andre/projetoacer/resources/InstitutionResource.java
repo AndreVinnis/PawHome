@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.andre.projetoacer.DTO.PostDTO;
 import com.andre.projetoacer.domain.Post;
+import com.andre.projetoacer.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -65,7 +66,7 @@ public class InstitutionResource {
     ) {
          Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
 
-         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, new Date());
+         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, new Date(), UserRole.USER);
          institution = service.saveInstitution(institution, image);
          URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(institution.getId()).toUri();
          return ResponseEntity.created(uri).build();
@@ -99,7 +100,7 @@ public class InstitutionResource {
         @RequestParam Integer houseNumber, @RequestParam String referencePoint) {
 
         Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-        Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null);
+        Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null, UserRole.USER);
         institution.setId(id);
         service.update(id, institution);
         return ResponseEntity.noContent().build();
