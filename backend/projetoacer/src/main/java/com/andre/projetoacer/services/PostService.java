@@ -5,24 +5,29 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
+import com.andre.projetoacer.DTO.post.PostCreationDTO;
+import com.andre.projetoacer.domain.*;
+import com.andre.projetoacer.util.PostUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.andre.projetoacer.DTO.AnimalDTO;
 import com.andre.projetoacer.DTO.user.AuthorDTO;
-import com.andre.projetoacer.domain.Animal;
-import com.andre.projetoacer.domain.GenericUser;
-import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.repository.PostRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PostService {
 	@Autowired
 	private PostRepository repository;
+
+    @Autowired
+    private AnimalService animalService;
+
+    @Autowired
+    private PostUpdater postUpdater;
 
 	public List<Post> findAll(){
 		return repository.findAll();
@@ -33,18 +38,38 @@ public class PostService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
-	public Post savePost(String title, Animal animal, GenericUser user, MultipartFile animalImage) {
-		try{
-            Post post = new Post(new Date(), title, new AuthorDTO(user), new AnimalDTO(animal));
-            post.setImageAnimal(animalImage.getBytes());
-            post.setImageUser(user.getImage());
+	public Post savePost(PostCreationDTO post, UserDetails userDetails) {
+        Animal animal = new Animal(post.name(), post.age(), post.weight(), post.sex(), post.species(), post.size(), post.type(), post.race(), post.description());
+        Post newPost;
+        GenericUser genericUser;
 
-            return repository.save(post);
+		if (userDetails instanceof Institution institution){
+            genericUser = institution;
         }
-        catch (IOException e){
-            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
+        else if (userDetails instanceof User user){
+            genericUser = user;
         }
+        else{
+            throw new ObjectNotFoundException("Usuário não encontrado");
+        }
+
+        animalService.saveAnimal(animal);
+        newPost = new Post(new Date(), post.title(), new AuthorDTO(genericUser), new AnimalDTO(animal));
+        postUpdater.updateListPosts(genericUser, newPost);
+        return repository.save(newPost);
 	}
+
+    public void uploadAnimalImage(String id, MultipartFile file) {
+        try {
+            Post post = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado"));
+            Animal animal = animalService.findById(post.getAnimalDTO().getAnimalId());
+            byte[] bytes = file.getBytes();
+            animal.setImage(bytes);
+            animalService.saveAnimal(animal);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao processar a imagem");
+        }
+    }
 	
 	public void delete(String id) {
 		repository.deleteById(id);

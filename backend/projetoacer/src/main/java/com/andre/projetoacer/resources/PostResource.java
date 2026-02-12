@@ -1,38 +1,23 @@
 package com.andre.projetoacer.resources;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import com.andre.projetoacer.DTO.MessageResponse;
+import com.andre.projetoacer.DTO.post.PostCreationDTO;
 import com.andre.projetoacer.domain.*;
 import com.andre.projetoacer.services.InstitutionService;
-import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.andre.projetoacer.DTO.PostDTO;
-import com.andre.projetoacer.enums.Race;
-import com.andre.projetoacer.enums.Sex;
-import com.andre.projetoacer.enums.Size;
-import com.andre.projetoacer.enums.Species;
-import com.andre.projetoacer.enums.Type;
-import com.andre.projetoacer.services.AnimalService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import com.andre.projetoacer.DTO.post.PostDTO;
 import com.andre.projetoacer.services.PostService;
 import com.andre.projetoacer.services.UserService;
-import com.andre.projetoacer.util.PostUpdater;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value="/posts")
@@ -45,13 +30,6 @@ public class PostResource {
 
     @Autowired
     private InstitutionService institutionService;
-	
-	@Autowired
-	private AnimalService animalService;
-	
-	@Autowired
-	private PostUpdater postUpdater;
-	
 	
 	@GetMapping
 	public ResponseEntity<List<PostDTO>> findAll(){
@@ -66,40 +44,17 @@ public class PostResource {
 		return ResponseEntity.ok().body(post);
 	}
 	
-	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> insert(
-		@RequestParam("name") String name, @RequestParam("age") Integer age,
-		@RequestParam("weight") Double weight, @RequestParam("sex") Sex sex,
-		@RequestParam("species") Species species, @RequestParam("size") Size size,
-		@RequestParam("type") Type type,  @RequestParam("race") Race race,
-		@RequestParam("description") String description, @RequestParam("title") String title,
-		@RequestParam("userId") String userId,
-		@RequestParam("image") MultipartFile image) {
-		
-
-        Animal animal = animalService.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
-        GenericUser user;
-
-        try{
-            user = userService.findById(userId);
-        }catch(ObjectNotFoundException e){
-            user = institutionService.findById(userId);
-        }
-
-        Post post = service.savePost(title, animal, user, image);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
-	    	
-        postUpdater.updateListPosts(user, post);
-
-        if(user instanceof User){
-            userService.updateListPosts((User) user);
-        }else{
-            institutionService.updateListPosts((Institution) user);
-        }
-
-        return ResponseEntity.created(uri).build();
-
+	@PostMapping
+	public ResponseEntity<MessageResponse> insert(@RequestBody PostCreationDTO newPost, @AuthenticationPrincipal UserDetails userDetails) {
+        service.savePost(newPost, userDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Post criado com sucesso!"));
 	}
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        service.uploadAnimalImage(id, file);
+        return ResponseEntity.noContent().build();
+    }
 	
 	@GetMapping("/{id}/imagem/user")
 	public ResponseEntity<byte[]> getUserImagem(@PathVariable String id) {

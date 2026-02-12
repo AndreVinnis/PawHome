@@ -1,4 +1,4 @@
-package com.andre.projetoacer.DTO;
+package com.andre.projetoacer.DTO.post;
 
 import java.io.Serializable;
 

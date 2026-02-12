@@ -11,7 +11,6 @@ public class AuthorDTO implements Serializable{
 	private String imagemUrl;
 	
 	public AuthorDTO() {
-		
 	}
 	
 	public AuthorDTO(GenericUser user) {

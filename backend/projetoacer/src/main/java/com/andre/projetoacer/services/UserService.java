@@ -51,10 +51,6 @@ public class UserService {
         return repository.save(newUser);
     }
 
-    public User updateListPosts(User user) {
-        return repository.save(user);
-    }   
-
     public User update(String id, User newUser) {
         User originalUser = repository.findById(id)
             .orElseThrow(() -> new ObjectNotFoundException("User not found"));

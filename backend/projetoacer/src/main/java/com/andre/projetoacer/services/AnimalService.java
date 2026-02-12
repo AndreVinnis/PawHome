@@ -1,15 +1,11 @@
 package com.andre.projetoacer.services;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.enums.PetDisease;
 import com.andre.projetoacer.enums.PetMedication;
@@ -35,13 +31,8 @@ public class AnimalService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
 	
-	public Animal saveAnimal(Animal animal, MultipartFile image) {
-		try{
-            animal.setImage(image.getBytes());
-            return repository.save(animal);
-        }catch (IOException e){
-            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
-        }
+	public Animal saveAnimal(Animal animal) {
+        return repository.save(animal);
     }
 	
 	public void delete(String id) {
