@@ -1,10 +1,19 @@
 package com.andre.projetoacer.services;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.andre.projetoacer.DTO.institution.InstitutionCreationDTO;
+import com.andre.projetoacer.domain.Address;
+import com.andre.projetoacer.domain.User;
+import com.andre.projetoacer.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,8 +23,13 @@ import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
 @Service
 public class InstitutionService {
+
     @Autowired
     private InstitutionRepository repository;
+
+    @Autowired
+    private PasswordEncoder encoder;
+
     public List<Institution> findAll(){
         return repository.findAll();
     }
@@ -23,14 +37,34 @@ public class InstitutionService {
     public Institution findById(String id) {
         Optional<Institution> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
-    } 
+    }
 
-    public Institution saveInstitution(Institution institution, MultipartFile image) {
-        try{
-            institution.setImagem(image.getBytes());
-            return repository.save(institution);
-        }catch (IOException e){
-            throw new RuntimeException("Erro ao processar a imagem: " + e.getMessage());
+    public Institution findByEmail(String email) {
+        Institution obj = repository.findByEmail(email);
+        if(obj == null) throw new ObjectNotFoundException("Institution not found");
+        return obj;
+    }
+
+    public Institution findByCnpj(String cnpj) {
+        Optional<Institution> obj = repository.findByCnpj(cnpj);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
+    }
+
+    public Institution saveInstitution(InstitutionCreationDTO institution) {
+        Address address = new Address(institution.cep(), institution.city(), institution.neighborhood(), institution.number(), institution.referencePoint());
+        Institution newInstitution = new Institution(institution.name(), institution.email(), institution.phoneNumber(),
+                encoder.encode(institution.password()), address, institution.cnpj(), institution.description(), new Date(), UserRole.USER);
+        return repository.save(newInstitution);
+    }
+
+    public void uploadUserImage(String id, MultipartFile file) {
+        try {
+            Institution institution = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+            byte[] bytes = file.getBytes();
+            institution.setImagem(bytes);
+            repository.save(institution);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao processar a imagem");
         }
     }
 
@@ -79,11 +113,4 @@ public class InstitutionService {
             .orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
         repository.deleteById(id);
     }
-
-    public Institution updateImage(String id, MultipartFile image) throws Exception {
-        Institution institution = findById(id);
-        institution.setImagem(image.getBytes());
-        return repository.save(institution);
-    }
-    
 }

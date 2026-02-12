@@ -1,22 +1,10 @@
 package com.andre.projetoacer.config;
 
-import java.util.Date;
-import java.util.Arrays;
 import com.andre.projetoacer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import com.andre.projetoacer.DTO.AnimalDTO;
-import com.andre.projetoacer.DTO.AuthorDTO;
-import com.andre.projetoacer.domain.Animal;
-import com.andre.projetoacer.domain.Post;
-import com.andre.projetoacer.domain.User;
-import com.andre.projetoacer.enums.Race;
-import com.andre.projetoacer.enums.Sex;
-import com.andre.projetoacer.enums.Size;
-import com.andre.projetoacer.enums.Species;
-import com.andre.projetoacer.enums.Type;
 import com.andre.projetoacer.repository.AnimalRepository;
 import com.andre.projetoacer.repository.PostRepository;
 

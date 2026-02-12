@@ -22,7 +22,7 @@ import com.andre.projetoacer.repository.UserRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     @Autowired
     private UserRepository repository;
@@ -40,8 +40,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User findByEmail(String email) {
-        Optional<User> obj = repository.findByEmail(email);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        User obj = repository.findByEmail(email);
+        if(obj == null) throw new ObjectNotFoundException("User not found");
+        return obj;
     }
 
     public User saveUser(UserCreationDTO user, UserRole role) {
@@ -104,10 +105,5 @@ public class UserService implements UserDetailsService {
 	    repository.findById(id)
 	        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 	    repository.deleteById(id);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

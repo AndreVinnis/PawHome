@@ -1,8 +1,8 @@
 package com.andre.projetoacer.infra.Security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -23,9 +23,11 @@ public class SecurityConfiguration {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login/user").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login/institution").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/normal").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/institutions").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -33,6 +35,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    @Lazy
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }

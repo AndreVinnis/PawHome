@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import com.andre.projetoacer.DTO.AnimalDTO;
-import com.andre.projetoacer.DTO.AuthorDTO;
+import com.andre.projetoacer.DTO.user.AuthorDTO;
 
 @Document
 public class Post implements Serializable {
