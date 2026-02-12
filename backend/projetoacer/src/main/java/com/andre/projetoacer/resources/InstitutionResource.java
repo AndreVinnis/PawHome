@@ -3,7 +3,7 @@ package com.andre.projetoacer.resources;
 import java.util.LinkedList;
 import java.util.List;
 import com.andre.projetoacer.DTO.MessageResponse;
-import com.andre.projetoacer.DTO.PostDTO;
+import com.andre.projetoacer.DTO.post.PostDTO;
 import com.andre.projetoacer.DTO.institution.InstitutionCreationDTO;
 import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.enums.UserRole;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.Institution;
 import com.andre.projetoacer.services.InstitutionService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value="/institutions")
@@ -57,6 +58,12 @@ public class InstitutionResource {
             service.saveInstitution(newInstitution);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
         }
+    }
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        service.uploadUserImage(id, file);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

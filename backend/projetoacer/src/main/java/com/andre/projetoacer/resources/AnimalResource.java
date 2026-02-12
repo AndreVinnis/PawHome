@@ -55,7 +55,7 @@ public class AnimalResource {
 		@RequestParam("type") Type type,  @RequestParam("race") Race race,
 		@RequestParam("description") String description, @RequestParam("image") MultipartFile image) {
 
-        Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description), image);
+        Animal obj = service.saveAnimal(new Animal(name, age, weight, sex, species, size, type, race, description));
 	        	        
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
