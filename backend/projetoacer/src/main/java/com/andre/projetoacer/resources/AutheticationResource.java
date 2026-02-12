@@ -2,7 +2,8 @@ package com.andre.projetoacer.resources;
 
 import com.andre.projetoacer.DTO.auth.AuthenticationDTO;
 import com.andre.projetoacer.DTO.auth.LoginResponseDTO;
-import com.andre.projetoacer.domain.GenericUser;
+import com.andre.projetoacer.domain.Institution;
+import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.infra.Security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,22 @@ public class AutheticationResource {
     private TokenService tokenService;
 
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO data){
+    @PostMapping("/login/user")
+    public ResponseEntity loginUser(@RequestBody AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateTowen((GenericUser) auth.getPrincipal());
+        var token = tokenService.generateUserToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+    @PostMapping("/login/institution")
+    public ResponseEntity loginInstitution(@RequestBody AuthenticationDTO data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        var auth = authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateInstitutionToken((Institution) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }

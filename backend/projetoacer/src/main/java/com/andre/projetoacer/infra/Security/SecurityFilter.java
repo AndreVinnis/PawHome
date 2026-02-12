@@ -1,5 +1,7 @@
 package com.andre.projetoacer.infra.Security;
 
+import com.andre.projetoacer.services.AuthorizationService;
+import com.andre.projetoacer.services.InstitutionService;
 import com.andre.projetoacer.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,17 +22,17 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
 
-    @Autowired
-    private UserService userService;
+   @Autowired
+   private AuthorizationService authorizationService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
         if(token != null){
             var login = tokenService.validateToken(token);
-            UserDetails userDetails = userService.findByEmail(login);
+            UserDetails user = authorizationService.loadUserByUsername(login);
 
-            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

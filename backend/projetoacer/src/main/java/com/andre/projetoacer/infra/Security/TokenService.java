@@ -1,6 +1,7 @@
 package com.andre.projetoacer.infra.Security;
 
-import com.andre.projetoacer.domain.GenericUser;
+import com.andre.projetoacer.domain.Institution;
+import com.andre.projetoacer.domain.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -18,17 +19,25 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateTowen(GenericUser user){
-        try{
+    public String generateUserToken(User user){
+        return createToken(user.getEmail(), "USER");
+    }
+
+    public String generateInstitutionToken(Institution institution){
+        return createToken(institution.getEmail(), "INSTITUTION");
+    }
+
+    private String createToken(String email, String role) {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(user.getEmail())
+                    .withSubject(email)
+                    .withClaim("userType", role)
                     .withExpiresAt(getExpirationDate())
                     .sign(algorithm);
-        }
-        catch(JWTCreationException e){
-            throw new RuntimeException("Error while generating token: " + e);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Error while generating token", e);
         }
     }
 
@@ -43,6 +52,19 @@ public class TokenService {
         }
         catch(JWTVerificationException e){
             return "";
+        }
+    }
+
+    public String getRoleFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getClaim("userType").asString();
+        } catch (JWTVerificationException e) {
+            return null;
         }
     }
 

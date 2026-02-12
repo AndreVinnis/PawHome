@@ -1,27 +1,19 @@
 package com.andre.projetoacer.resources;
 
-import java.net.URI;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
+import com.andre.projetoacer.DTO.MessageResponse;
 import com.andre.projetoacer.DTO.PostDTO;
+import com.andre.projetoacer.DTO.institution.InstitutionCreationDTO;
 import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.enums.UserRole;
+import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.Institution;
 import com.andre.projetoacer.services.InstitutionService;
@@ -55,21 +47,16 @@ public class InstitutionResource {
         return ResponseEntity.ok().body(posts);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> insert(
-        @RequestParam("name") String name, @RequestParam("email") String email,
-        @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password,
-        @RequestParam("cnpj") String cnpj, @RequestParam("description") String description,
-        @RequestParam("image") MultipartFile image,@RequestParam("cep") String cep, @RequestParam("city") String city,
-        @RequestParam("neighborhood") String neighborhood, @RequestParam("houseNumber") Integer houseNumber,
-        @RequestParam("referencePoint") String referencePoint
-    ) {
-         Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-
-         Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, new Date(), UserRole.USER);
-         institution = service.saveInstitution(institution, image);
-         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(institution.getId()).toUri();
-         return ResponseEntity.created(uri).build();
+    @PostMapping
+    public ResponseEntity<MessageResponse> insert(@RequestBody InstitutionCreationDTO newInstitution) {
+        try{
+            service.findByEmail(newInstitution.email());
+            service.findByCnpj(newInstitution.cnpj());
+            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
+        }catch(ObjectNotFoundException ex){
+            service.saveInstitution(newInstitution);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
+        }
     }
 
     @DeleteMapping("/{id}")

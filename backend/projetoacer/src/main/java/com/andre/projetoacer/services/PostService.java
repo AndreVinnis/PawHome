@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.andre.projetoacer.DTO.AnimalDTO;
-import com.andre.projetoacer.DTO.AuthorDTO;
+import com.andre.projetoacer.DTO.user.AuthorDTO;
 import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;

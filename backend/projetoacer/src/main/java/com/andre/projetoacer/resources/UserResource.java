@@ -43,12 +43,12 @@ public class UserResource {
 	public ResponseEntity<MessageResponse> insertNormalUser(@RequestBody UserCreationDTO newUser) {
         try{
             service.findByEmail(newUser.email());
-        }
-        catch(ObjectNotFoundException ex){
             return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
         }
-        service.saveUser(newUser, UserRole.USER);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        catch(ObjectNotFoundException ex){
+            service.saveUser(newUser, UserRole.USER);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        }
 	}
 
     @PostMapping("/admin")
