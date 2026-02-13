@@ -46,6 +46,12 @@ public class UserService {
     }
 
     public User saveUser(UserCreationDTO user, UserRole role) {
+        User existingUser = repository.findByEmail(user.email());
+
+        if (existingUser != null) {
+            throw new RuntimeException("E-mail já cadastrado no sistema.");
+        }
+
         Address address = new Address(user.cep(), user.city(), user.neighborhood(), user.number(), user.referencePoint());
         User newUser = new User(user.name(), user.email(), user.phoneNumber(), encoder.encode(user.password()), address, user.secondName(), user.cpf(), user.birthDate(), role);
         return repository.save(newUser);
