@@ -82,20 +82,9 @@ public class UserResource {
     } 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(
-            @PathVariable String id, @RequestParam String name,
-            @RequestParam String email, @RequestParam String phoneNumber,
-            @RequestParam String password, @RequestParam String secondName,
-            @RequestParam String cpf, @RequestParam Date birthDate,
-            @RequestParam String cep, @RequestParam String city,
-            @RequestParam String neighborhood, @RequestParam Integer houseNumber,
-            @RequestParam String referencePoint) {
-        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-        User user = new User(name, email, phoneNumber, password, addressObj, secondName, cpf, birthDate, UserRole.USER);
-        user.setId(id);
-        service.update(id, user);
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody UserCreationDTO newUser) {
+        service.update(id, newUser);
         return ResponseEntity.noContent().build();
-        
     }
 }
 
