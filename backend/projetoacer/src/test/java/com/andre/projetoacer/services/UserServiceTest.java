@@ -1,6 +1,7 @@
 package com.andre.projetoacer.services;
 
 import com.andre.projetoacer.DTO.user.UserCreationDTO;
+import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.UserRole;
 import com.andre.projetoacer.repository.UserRepository;
@@ -141,7 +142,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma lista não vazia com todos os usuários")
+    @DisplayName("Deve retornar uma lista, não vazia, com todos os usuários")
     public void findAllUserNotEmpty(){
         User user1 = new User();
         User user2 = new User();
@@ -206,5 +207,65 @@ public class UserServiceTest {
 
         assertEquals(expectedMessage, result.getMessage());
         verify(userRepository, never()).deleteById(userId);
+    }
+
+    @Test
+    @DisplayName("Deve fazer as alterações passadas e savar os usuários com as alterações feitas")
+    public void updateUserSuccessfully(){
+        User user = new User();
+        UserCreationDTO newUser = new UserCreationDTO(
+                "Andre Vinícius",
+                "Barros",
+                "123.456.789-00",
+                new Date(2005, 6, 6),
+                "andre@email.com",
+                "88999990000",
+                "senha123",
+                "63000-000",
+                "Juazeiro do Norte",
+                "Centro",
+                123,
+                "Próximo à praça principal"
+        );
+        String userId = "123456789";
+        user.setId(userId);
+        user.setName("Andre");
+        user.setEmail("andre@gmail.com");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.update(userId, newUser);
+
+        assertEquals("Andre Vinícius", user.getName());
+        assertEquals("Juazeiro do Norte", user.getAddress().getCity());
+        assertEquals(new Date(2005, 6, 6), user.getBirthDate());
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção de ObjectNotFoundException(Usuário não encontrado) e não fazer o update")
+    public void shouldNotUpdateWhenUserNotFound(){
+        String userId = "dsadasdasdasd";
+        String expectedMessage = "User not found";
+        UserCreationDTO newUser = new UserCreationDTO(
+                "Andre Vinícius",
+                "Barros",
+                "123.456.789-00",
+                new Date(2005, 6, 6),
+                "andre@email.com",
+                "88999990000",
+                "senha123",
+                "63000-000",
+                "Juazeiro do Norte",
+                "Centro",
+                123,
+                "Próximo à praça principal"
+        );
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> {
+            userService.update(userId, newUser);
+        });
+        assertEquals(expectedMessage, result.getMessage());
     }
 }

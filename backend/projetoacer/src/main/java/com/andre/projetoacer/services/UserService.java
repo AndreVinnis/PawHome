@@ -57,10 +57,8 @@ public class UserService {
         return repository.save(newUser);
     }
 
-    public User update(String id, User newUser) {
-        User originalUser = repository.findById(id)
-            .orElseThrow(() -> new ObjectNotFoundException("User not found"));
-
+    public User update(String id, UserCreationDTO newUser) {
+        User originalUser = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         partialUpdate(originalUser, newUser);
         return repository.save(originalUser);
     }
@@ -76,30 +74,35 @@ public class UserService {
         }
     }
 
-    private void partialUpdate(User originalUser, User newUser) {
-        if (newUser.getName() != null) {
-            originalUser.setName(newUser.getName());
+    private void partialUpdate(User originalUser, UserCreationDTO newUser) {
+        if (newUser.name() != null) {
+            originalUser.setName(newUser.name());
         }
-        if (newUser.getEmail() != null) {
-            originalUser.setEmail(newUser.getEmail());
+        if (newUser.email() != null) {
+            originalUser.setEmail(newUser.email());
         }
-        if (newUser.getPhoneNumber() != null) {
-            originalUser.setPhoneNumber(newUser.getPhoneNumber());
+        if (newUser.phoneNumber() != null) {
+            originalUser.setPhoneNumber(newUser.phoneNumber());
         }
-        if (newUser.getPassword() != null) {
-            originalUser.setPassword(newUser.getPassword());
+        if (newUser.password() != null) {
+            originalUser.setPassword(newUser.password());
         }
-        if (newUser.getAddress() != null) {
-            originalUser.setAddress(newUser.getAddress());
+        if (newUser.cep() != null
+            || newUser.city() != null
+            || newUser.neighborhood() != null
+            || newUser.number() != null
+            || newUser.referencePoint() != null) {
+            Address address = new Address(newUser.cep(), newUser.city(), newUser.neighborhood(),  newUser.number(), newUser.referencePoint());
+            originalUser.setAddress(address);
         }
-        if (newUser.getSecondName() != null) {
-            originalUser.setSecondName(newUser.getSecondName());
+        if (newUser.secondName() != null) {
+            originalUser.setSecondName(newUser.secondName());
         }
-        if (newUser.getCpf() != null) {
-            originalUser.setCpf(newUser.getCpf());
+        if (newUser.cpf() != null) {
+            originalUser.setCpf(newUser.cpf());
         }
-        if (newUser.getBirthDate() != null) {
-            originalUser.setBirthDate(newUser.getBirthDate());
+        if (newUser.birthDate() != null) {
+            originalUser.setBirthDate(newUser.birthDate());
         }
     }
 
