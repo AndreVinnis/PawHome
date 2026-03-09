@@ -109,7 +109,7 @@ public abstract class GenericUser implements Serializable, UserDetails {
 		return image;
 	}
 
-	public void setImagem(byte[] image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}
 

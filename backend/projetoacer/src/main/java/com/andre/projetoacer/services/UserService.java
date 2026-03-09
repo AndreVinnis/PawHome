@@ -67,7 +67,7 @@ public class UserService {
         try {
             User user = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
             byte[] bytes = file.getBytes();
-            user.setImagem(bytes);
+            user.setImage(bytes);
             repository.save(user);
         } catch (IOException e) {
             throw new RuntimeException("Erro ao processar a imagem");

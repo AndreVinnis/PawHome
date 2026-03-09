@@ -61,7 +61,7 @@ public class InstitutionService {
         try {
             Institution institution = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
             byte[] bytes = file.getBytes();
-            institution.setImagem(bytes);
+            institution.setImage(bytes);
             repository.save(institution);
         } catch (IOException e) {
             throw new RuntimeException("Erro ao processar a imagem");

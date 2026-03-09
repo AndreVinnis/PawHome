@@ -12,7 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -267,5 +270,48 @@ public class UserServiceTest {
             userService.update(userId, newUser);
         });
         assertEquals(expectedMessage, result.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve salvar uma alteração na imagem do usuário com sucesso")
+    public void updateUserImagemSuccessfully(){
+        User user = new User();
+        String userId = "dsuadasdashdiausdasd";
+        String userName = "André Vinícius";
+        user.setId(userId);
+        user.setName(userName);
+        MultipartFile image = new MockMultipartFile(
+                "file",
+                "dog-foto.jpg",
+                "image/jpeg",
+                "conteúdo da imagem".getBytes()
+        );
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.uploadUserImage(userId, image);
+
+        assertNotNull(user.getImage());
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma ObjectNotFoundException")
+    public void shouldNotUpdateImageWhenUserNotFound(){
+        User user = new User();
+        String userId = "dsuadasdashdiausdasd";
+        String message = "Usuário não encontrado";
+        MultipartFile image = new MockMultipartFile(
+                "file",
+                "dog-foto.jpg",
+                "image/jpeg",
+                "conteúdo da imagem".getBytes()
+        );
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException result =assertThrows(ObjectNotFoundException.class, () -> userService.uploadUserImage(userId, image));
+
+        assertEquals(message, result.getMessage());
     }
 }
