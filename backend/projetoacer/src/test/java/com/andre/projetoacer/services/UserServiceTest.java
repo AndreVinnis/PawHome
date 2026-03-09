@@ -1,7 +1,6 @@
 package com.andre.projetoacer.services;
 
 import com.andre.projetoacer.DTO.user.UserCreationDTO;
-import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.UserRole;
 import com.andre.projetoacer.repository.UserRepository;
@@ -15,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
