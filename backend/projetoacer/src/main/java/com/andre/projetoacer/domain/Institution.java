@@ -18,6 +18,9 @@ public class Institution extends GenericUser{
 		this.description = description;
 		this.createDate = createDate;
 	}
+    public Institution(){
+    }
+
 	public String getCnpj() {
 		return cnpj;
 	}
