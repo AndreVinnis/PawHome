@@ -44,10 +44,11 @@ public class UserServiceTest {
                 "01001000", "São Paulo", "Centro", 100, "Perto do Metrô"
         );
 
-        when(encoder.encode(anyString())).thenReturn("senha_cripto");
         User user = new User();
         user.setName(userCreationDTO.name());
         user.setEmail(userCreationDTO.email());
+
+        when(encoder.encode(anyString())).thenReturn("senha_cripto");
         when(userRepository.save(user)).thenReturn(user);
 
         //Act
@@ -63,7 +64,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar um erro de usuário já cadastrado com esse email")
+    @DisplayName("Deve lançar uma RuntimeException de usuário já cadastrado com esse email")
     public void saveUserEmailAlreadyExists(){
         UserCreationDTO userCreationDTO = new UserCreationDTO(
                 "André", "Silva", "12345678900", new Date(),
@@ -228,7 +229,7 @@ public class UserServiceTest {
                 123,
                 "Próximo à praça principal"
         );
-        String userId = "123456789";
+        String userId = "atdfsaudfasd";
         user.setId(userId);
         user.setName("Andre");
         user.setEmail("andre@gmail.com");
@@ -275,9 +276,7 @@ public class UserServiceTest {
     public void updateUserImagemSuccessfully(){
         User user = new User();
         String userId = "dsuadasdashdiausdasd";
-        String userName = "André Vinícius";
         user.setId(userId);
-        user.setName(userName);
         MultipartFile image = new MockMultipartFile(
                 "file",
                 "dog-foto.jpg",

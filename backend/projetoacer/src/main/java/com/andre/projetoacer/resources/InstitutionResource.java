@@ -85,17 +85,7 @@ public class InstitutionResource {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(
-        @PathVariable String id, @RequestParam String name,
-        @RequestParam String email, @RequestParam String phoneNumber,
-        @RequestParam String password, @RequestParam String cnpj,
-        @RequestParam String description, @RequestParam String cep,
-        @RequestParam String city, @RequestParam String neighborhood,
-        @RequestParam Integer houseNumber, @RequestParam String referencePoint) {
-
-        Address addressObj = new Address(cep, city, neighborhood, houseNumber, referencePoint);
-        Institution institution = new Institution(name, email, phoneNumber, password, addressObj, cnpj, description, null, UserRole.USER);
-        institution.setId(id);
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody InstitutionCreationDTO institution) {
         service.update(id, institution);
         return ResponseEntity.noContent().build();
     }

@@ -85,7 +85,7 @@ public class UserService {
             originalUser.setPhoneNumber(newUser.phoneNumber());
         }
         if (newUser.password() != null) {
-            originalUser.setPassword(newUser.password());
+            originalUser.setPassword(encoder.encode(newUser.password()));
         }
         if (newUser.cep() != null
             || newUser.city() != null
