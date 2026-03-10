@@ -36,21 +36,31 @@ public class InstitutionService {
 
     public Institution findById(String id) {
         Optional<Institution> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found!"));
     }
 
     public Institution findByEmail(String email) {
         Institution obj = repository.findByEmail(email);
-        if(obj == null) throw new ObjectNotFoundException("Institution not found");
+        if(obj == null) throw new ObjectNotFoundException("Institution not found!");
         return obj;
     }
 
     public Institution findByCnpj(String cnpj) {
         Optional<Institution> obj = repository.findByCnpj(cnpj);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Institution not found!"));
     }
 
     public Institution saveInstitution(InstitutionCreationDTO institution) {
+        Institution existEmailInstitution = repository.findByEmail(institution.email());
+        Optional<Institution> existCpnjInstitution = repository.findByCnpj(institution.cnpj());
+
+        if(existEmailInstitution != null){
+            throw new RuntimeException("E-mail já cadastrado no sistema!");
+        }
+        if(existCpnjInstitution.isPresent()){
+            throw new RuntimeException("CNPJ já cadastrado no sistema!");
+        }
+
         Address address = new Address(institution.cep(), institution.city(), institution.neighborhood(), institution.number(), institution.referencePoint());
         Institution newInstitution = new Institution(institution.name(), institution.email(), institution.phoneNumber(),
                 encoder.encode(institution.password()), address, institution.cnpj(), institution.description(), new Date(), UserRole.USER);
@@ -59,58 +69,55 @@ public class InstitutionService {
 
     public void uploadUserImage(String id, MultipartFile file) {
         try {
-            Institution institution = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+            Institution institution = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado!"));
             byte[] bytes = file.getBytes();
             institution.setImage(bytes);
             repository.save(institution);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao processar a imagem");
+            throw new RuntimeException("Erro ao processar a imagem!");
         }
     }
 
-    public Institution updateListPosts(Institution institution) {
-        return repository.save(institution);
-    }
+    public Institution update(String id, InstitutionCreationDTO newInstitution) {
+        Institution originalInstitution = repository.findById(id)
+            .orElseThrow(() -> new ObjectNotFoundException("Institution not found!"));
 
-    public Institution update(String id, Institution newInstitution) {
-    Institution originalInstitution = repository.findById(id)
-        .orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
-
-    partialUpdate(originalInstitution, newInstitution);
+        partialUpdate(originalInstitution, newInstitution);
         return repository.save(originalInstitution);
     }
 
-    private void partialUpdate(Institution originalInstitution, Institution newInstitution) {
-        if (newInstitution.getName() != null) {
-            originalInstitution.setName(newInstitution.getName());
+    private void partialUpdate(Institution originalInstitution, InstitutionCreationDTO newInstitution) {
+        if (newInstitution.name() != null) {
+            originalInstitution.setName(newInstitution.name());
         }
-        if (newInstitution.getEmail() != null) {
-            originalInstitution.setEmail(newInstitution.getEmail());
+        if (newInstitution.email() != null) {
+            originalInstitution.setEmail(newInstitution.email());
         }
-        if (newInstitution.getPhoneNumber() != null) {
-            originalInstitution.setPhoneNumber(newInstitution.getPhoneNumber());
+        if (newInstitution.phoneNumber() != null) {
+            originalInstitution.setPhoneNumber(newInstitution.phoneNumber());
         }
-        if (newInstitution.getPassword() != null) {
-            originalInstitution.setPassword(newInstitution.getPassword());
+        if (newInstitution.password() != null) {
+            originalInstitution.setPassword(encoder.encode(newInstitution.password()));
         }
-        if (newInstitution.getAddress() != null) {
-            originalInstitution.setAddress(newInstitution.getAddress());
+        if (newInstitution.cep() != null
+                || newInstitution.city() != null
+                || newInstitution.neighborhood() != null
+                || newInstitution.number() != null
+                || newInstitution.referencePoint() != null) {
+            Address address = new Address(newInstitution.cep(), newInstitution.city(), newInstitution.neighborhood(),  newInstitution.number(), newInstitution.referencePoint());
+            originalInstitution.setAddress(address);
         }
-        if (newInstitution.getCnpj() != null) {
-            originalInstitution.setCnpj(newInstitution.getCnpj());
+        if (newInstitution.cnpj() != null) {
+            originalInstitution.setCnpj(newInstitution.cnpj());
         }
-        if (newInstitution.getDescription() != null) {
-            originalInstitution.setDescription(newInstitution.getDescription());
+        if (newInstitution.description() != null) {
+            originalInstitution.setDescription(newInstitution.description());
         }
-        if (newInstitution.getCreateDate() != null) {
-            originalInstitution.setCreateDate(newInstitution.getCreateDate());
-        }
-
     }
 
     public void delete(String id) {
         repository.findById(id)
-            .orElseThrow(() -> new ObjectNotFoundException("Institution not found"));
+            .orElseThrow(() -> new ObjectNotFoundException("Institution not found!"));
         repository.deleteById(id);
     }
 }
