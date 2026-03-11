@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.andre.projetoacer.enums.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,5 +84,37 @@ public class AnimalServiceTest {
 
 		//Then
 		verify(repository, times(1)).deleteById(animal.getId());
+	}
+
+	@Test
+	public void testUpdate_ShouldReturnUpdatedAnimal(){
+		//Given & When
+		String nameTest = "Luna";
+		Integer ageTest = 2;
+		Double weightTest = 4.3;
+		Sex sexTest = Sex.FEMALE;
+		Species speciesTest = Species.CAT;
+		Size sizeTest = Size.SMALL;
+		Type typeTest = Type.DOMESTIC;
+		Race raceTest = Race.C_BENGAL;
+		String descriptionTest = "Gata muito carinhosa, tranquila e acostumada com pessoas.";
+
+		animal.setId("id");
+		when(repository.findById(anyString())).thenReturn(Optional.of(animal));
+		when(repository.save(animal)).thenReturn(animal);
+
+		Animal animalTest = service.update(nameTest, ageTest, weightTest, sexTest, speciesTest, sizeTest, typeTest, raceTest, descriptionTest, animal.getId());
+
+		//Then
+		assertNotNull(animalTest);
+		assertEquals(nameTest, animalTest.getName());
+		assertEquals(ageTest, animalTest.getAge());
+		assertEquals(weightTest, animalTest.getWeight());
+		assertEquals(sexTest, animalTest.getSex());
+		assertEquals(speciesTest, animalTest.getSpecies());
+		assertEquals(sizeTest, animalTest.getSize());
+		assertEquals(typeTest, animalTest.getType());
+		assertEquals(raceTest, animalTest.getRace());
+		assertEquals(descriptionTest, animalTest.getDescription());
 	}
 }
