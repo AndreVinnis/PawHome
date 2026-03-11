@@ -73,6 +73,17 @@ public class AnimalServiceTest {
 	}
 
 	@Test
+	public void testFindById_ShouldReturnAnimal() {
+		//Given & When
+		when(repository.findById(anyString())).thenReturn(Optional.of(animal));
+		Animal foundAnimal = service.findById("a1b2c3d4");
+
+		//Then
+		assertNotNull(foundAnimal);
+		assertEquals(animal.getId(), foundAnimal.getId());
+	}
+
+	@Test
 	public void testSaveAnimal_ShouldReturnSavedAnimal(){
 		//Given & When
 		when(repository.save(animal)).thenReturn(animal);
