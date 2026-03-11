@@ -17,21 +17,28 @@ public class AuthorDTO implements Serializable{
 		userId = user.getId();
 		name = user.getName(); 
 	}
-	
-	public String getUserID() {
-		return userId;
-	}
-	
-	public String getName() {
-		return name;
-	}
 
-	public String getImagemUrl() {
-		return imagemUrl;
-	}
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
 
-	public void setImagemUrl(String imagemUrl) {
-		this.imagemUrl = imagemUrl;
-	}
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

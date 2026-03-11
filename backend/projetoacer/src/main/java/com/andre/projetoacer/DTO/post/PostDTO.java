@@ -28,7 +28,7 @@ public class PostDTO implements Serializable{
 		animalName = post.getAnimalDTO().getName();
 		animalSex = post.getAnimalDTO().getSex();
 		animalType = post.getAnimalDTO().getType();
-		animalIsAdopted = post.getAnimalDTO().getIsAdopted();
+		animalIsAdopted = post.getAnimalDTO().getAdopted();
 		animalName = post.getAnimalDTO().getName();
 
         imageAnimal = post.getImageAnimal();
