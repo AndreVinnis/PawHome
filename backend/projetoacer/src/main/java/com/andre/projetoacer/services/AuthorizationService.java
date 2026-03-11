@@ -25,6 +25,6 @@ public class AuthorizationService implements UserDetailsService {
         UserDetails institution = institutionRepository.findByEmail(username);
         if (institution != null) return institution;
 
-        throw new UsernameNotFoundException("Usuário não encontrado");
+        throw new UsernameNotFoundException("Usuário não encontrado!");
     }
 }
