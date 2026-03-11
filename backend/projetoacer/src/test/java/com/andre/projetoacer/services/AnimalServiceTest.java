@@ -2,9 +2,11 @@ package com.andre.projetoacer.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,5 +70,18 @@ public class AnimalServiceTest {
 		//Then
 		assertNotNull(savedAnimal);
 		assertEquals(animal.getId(), savedAnimal.getId());
+	}
+
+	@Test
+	public void testDelete_ShouldDeleteAnimal(){
+		//Given & When
+		animal.setId("id");
+		when(repository.findById(anyString())).thenReturn(Optional.of(animal));
+		doNothing().when(repository).deleteById(animal.getId());
+
+		service.delete(animal.getId());
+
+		//Then
+		verify(repository, times(1)).deleteById(animal.getId());
 	}
 }
