@@ -58,4 +58,15 @@ public class AnimalServiceTest {
 		assertNotNull(list);
 		assertEquals(2, list.size());
 	}
+
+	@Test
+	public void testSaveAnimal_ShouldReturnSavedAnimal(){
+		//Given & When
+		when(repository.save(animal)).thenReturn(animal);
+		Animal savedAnimal = service.saveAnimal(animal);
+
+		//Then
+		assertNotNull(savedAnimal);
+		assertEquals(animal.getId(), savedAnimal.getId());
+	}
 }
