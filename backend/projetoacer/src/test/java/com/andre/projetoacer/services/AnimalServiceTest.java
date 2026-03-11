@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import com.andre.projetoacer.domain.MedicalRecords;
 import com.andre.projetoacer.enums.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,14 @@ public class AnimalServiceTest {
 		animal.setWeight(18.5);
 		animal.setIsAdopted(false);
 		animal.setDescription("Cachorro muito dócil, gosta de brincar e se dá bem com crianças.");
+
+		List<PetDisease> diseases = List.of(PetDisease.DENTAL_DISEASE);
+		List<PetMedication> medications = List.of(PetMedication.DOXYCYCLINE);
+		MedicalRecords medicalRecords = new MedicalRecords();
+		medicalRecords.setDiseases(diseases);
+		medicalRecords.setMedications(medications);
+
+		animal.setMedicalRecords(medicalRecords);
 	}
 	
 	@Test
@@ -88,7 +98,7 @@ public class AnimalServiceTest {
 
 	@Test
 	public void testUpdate_ShouldReturnUpdatedAnimal(){
-		//Given & When
+		//Given
 		String nameTest = "Luna";
 		Integer ageTest = 2;
 		Double weightTest = 4.3;
@@ -99,6 +109,7 @@ public class AnimalServiceTest {
 		Race raceTest = Race.C_BENGAL;
 		String descriptionTest = "Gata muito carinhosa, tranquila e acostumada com pessoas.";
 
+		//When
 		animal.setId("id");
 		when(repository.findById(anyString())).thenReturn(Optional.of(animal));
 		when(repository.save(animal)).thenReturn(animal);
@@ -117,4 +128,26 @@ public class AnimalServiceTest {
 		assertEquals(raceTest, animalTest.getRace());
 		assertEquals(descriptionTest, animalTest.getDescription());
 	}
+
+	@Test
+	public void testUpdateMedicalRecords_ShouldReturnUpdatedAnimalRecords(){
+		//Given
+		List<PetDisease> diseasesTest = List.of(PetDisease.HEART_DISEASE);
+		List<PetMedication> medicationsTest = List.of(PetMedication.FLUCONAZOLE);
+
+		//When
+		animal.setId("id");
+		when(repository.findById(anyString())).thenReturn(Optional.of(animal));
+		when(repository.save(animal)).thenReturn(animal);
+
+		Animal animalTest = service.updateMedicalRecords(diseasesTest, medicationsTest, animal.getId());
+
+		//Then
+		assertNotNull(animalTest);
+		assertEquals(diseasesTest.size(), animalTest.getMedicalRecords().getDiseases().size());
+		assertEquals(medicationsTest.size(), animalTest.getMedicalRecords().getMedications().size());
+		assertEquals(diseasesTest.get(0), animalTest.getMedicalRecords().getDiseases().get(0));
+		assertEquals(medicationsTest.get(0), animalTest.getMedicalRecords().getMedications().get(0));
+	}
+
 }
