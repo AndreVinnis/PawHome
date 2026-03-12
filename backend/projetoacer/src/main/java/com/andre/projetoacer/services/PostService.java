@@ -35,7 +35,7 @@ public class PostService {
 	
 	public Post findById(String id) {
 		Optional<Post> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
 	}
 	
 	public Post savePost(PostCreationDTO post, UserDetails userDetails) {

@@ -3,9 +3,12 @@ package com.andre.projetoacer.services;
 import com.andre.projetoacer.DTO.AnimalDTO;
 import com.andre.projetoacer.DTO.post.PostCreationDTO;
 import com.andre.projetoacer.DTO.user.AuthorDTO;
+import com.andre.projetoacer.domain.Animal;
 import com.andre.projetoacer.domain.Post;
+import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.*;
 import com.andre.projetoacer.repository.PostRepository;
+import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import com.andre.projetoacer.util.PostUpdater;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
@@ -87,5 +92,33 @@ class PostServiceTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
+    }
+
+    @Test
+    @DisplayName("Deve retornar um post passando o id")
+    public void shouldReturnPost_When_PassCorrectId(){
+        String postId = "fadasd3e4reqda";
+        post.setId(postId);
+
+        when(postRepository.findById(postId)).thenReturn(Optional.ofNullable(post));
+
+        Post result = postService.findById(postId);
+
+        assertNotNull(result);
+        assertEquals("dadasd243sdad232", result.getAuthor().getUserId());
+        assertEquals("Thor", result.getAnimalDTO().getName());
+        assertEquals("Cachorro para adoção", result.getTitle());
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção quando passado um id inexistente")
+    public void shouldThrowObjectNotFoundException_When_PassNonexistedId(){
+        String message = "Objeto não encontrado!";
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.findById(anyString()));
+        assertNotNull(result);
+        assertEquals(message, result.getMessage());
     }
 }
