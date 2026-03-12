@@ -39,10 +39,7 @@ public class PostService {
 	}
 	
 	public Post savePost(PostCreationDTO post, UserDetails userDetails) {
-        Animal animal = new Animal(post.name(), post.age(), post.weight(), post.sex(), post.species(), post.size(), post.type(), post.race(), post.description());
-        Post newPost;
         GenericUser genericUser;
-
 		if (userDetails instanceof Institution institution){
             genericUser = institution;
         }
@@ -50,8 +47,11 @@ public class PostService {
             genericUser = user;
         }
         else{
-            throw new ObjectNotFoundException("Usuário não encontrado");
+            throw new ObjectNotFoundException("Usuário não encontrado!");
         }
+
+        Animal animal = new Animal(post.name(), post.age(), post.weight(), post.sex(), post.species(), post.size(), post.type(), post.race(), post.description());
+        Post newPost;
 
         animalService.saveAnimal(animal);
         newPost = new Post(new Date(), post.title(), new AuthorDTO(genericUser), new AnimalDTO(animal));
@@ -61,13 +61,13 @@ public class PostService {
 
     public void uploadAnimalImage(String id, MultipartFile file) {
         try {
-            Post post = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado"));
+            Post post = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
             Animal animal = animalService.findById(post.getAnimalDTO().getAnimalId());
             byte[] bytes = file.getBytes();
             animal.setImage(bytes);
             animalService.saveAnimal(animal);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao processar a imagem");
+            throw new RuntimeException("Erro ao processar a imagem!");
         }
     }
 	
@@ -76,7 +76,7 @@ public class PostService {
 	}
 	
 	public Post update(Post newObj, String id) {
-		Post inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		Post inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
 		partialUpdate(inicialObj, newObj);
 		return repository.save(inicialObj);   
 	}

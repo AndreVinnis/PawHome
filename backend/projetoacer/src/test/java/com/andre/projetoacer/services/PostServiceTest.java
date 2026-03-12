@@ -3,9 +3,7 @@ package com.andre.projetoacer.services;
 import com.andre.projetoacer.DTO.AnimalDTO;
 import com.andre.projetoacer.DTO.post.PostCreationDTO;
 import com.andre.projetoacer.DTO.user.AuthorDTO;
-import com.andre.projetoacer.domain.Animal;
-import com.andre.projetoacer.domain.Post;
-import com.andre.projetoacer.domain.User;
+import com.andre.projetoacer.domain.*;
 import com.andre.projetoacer.enums.*;
 import com.andre.projetoacer.repository.PostRepository;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
@@ -17,14 +15,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -83,7 +83,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("Deve retornar uma lista com todos os posts")
-    public void shouldReturnAListWithAllPosts(){
+    public void testFindAll_ShouldReturnAllPosts(){
         Post post1 = new Post();
 
         when(postRepository.findAll()).thenReturn(List.of(post, post1));
@@ -96,7 +96,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("Deve retornar um post passando o id")
-    public void shouldReturnPost_When_PassCorrectId(){
+    public void testFindById_WhenPassCorrectId_ShouldReturnPost(){
         String postId = "fadasd3e4reqda";
         post.setId(postId);
 
@@ -112,7 +112,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção quando passado um id inexistente")
-    public void shouldThrowObjectNotFoundException_When_PassNonexistedId(){
+    public void testFindById_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         String message = "Objeto não encontrado!";
 
         when(postRepository.findById(anyString())).thenReturn(Optional.empty());
@@ -121,4 +121,65 @@ class PostServiceTest {
         assertNotNull(result);
         assertEquals(message, result.getMessage());
     }
+
+    @Test
+    @DisplayName("Deve salvar um post de usuário no banco de dados")
+    public void testSavePost_WhenPassCorrectUserDatas_ShouldSavePost(){
+        User user = new User();
+        String userId = "rwqaewda3434q";
+        user.setId(userId);
+        String userName = "André Vinícius";
+        user.setName(userName);
+
+        when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        doCallRealMethod().when(postUpdater).updateListPosts(eq(user), any(Post.class));
+
+        Post result = postService.savePost(postCreationDTO, user);
+
+        assertNotNull(result);
+        assertEquals(user.getId(), result.getAuthor().getUserId());
+        assertEquals(user.getName(), result.getAuthor().getName());
+        assertEquals(postCreationDTO.title(), result.getTitle());
+        assertEquals(postCreationDTO.name(), result.getAnimalDTO().getName());
+        assertEquals(postCreationDTO.age(), result.getAnimalDTO().getAge());
+        assertEquals(postCreationDTO.sex(), result.getAnimalDTO().getSex());
+        assertEquals(postCreationDTO.type(), result.getAnimalDTO().getType());
+        assertEquals(false, result.getAnimalDTO().getAdopted());
+        assertEquals(1, user.getPosts().size());
+        verify(postUpdater, times(1)).updateListPosts(user, result);
+    }
+
+    @Test
+    @DisplayName("Deve salvar um post de instituição no banco de dados")
+    public void testSavePost_WhenPassCorrectInstitutionDatas_ShouldSavePost(){
+        Institution institution = new Institution();
+        String institutionId = "rwqaewda3434q";
+        institution.setId(institutionId);
+        String institutionName = "André Vinícius";
+        institution.setName(institutionName);
+
+        when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        doCallRealMethod().when(postUpdater).updateListPosts(eq(institution), any(Post.class));
+
+        Post result = postService.savePost(postCreationDTO, institution);
+
+        assertNotNull(result);
+        assertEquals(institution.getId(), result.getAuthor().getUserId());
+        assertEquals(institution.getName(), result.getAuthor().getName());
+        assertEquals(postCreationDTO.title(), result.getTitle());
+        assertEquals(postCreationDTO.name(), result.getAnimalDTO().getName());
+        assertEquals(postCreationDTO.age(), result.getAnimalDTO().getAge());
+        assertEquals(postCreationDTO.sex(), result.getAnimalDTO().getSex());
+        assertEquals(postCreationDTO.type(), result.getAnimalDTO().getType());
+        assertEquals(false, result.getAnimalDTO().getAdopted());
+        assertEquals(1, institution.getPosts().size());
+        verify(postUpdater, times(1)).updateListPosts(institution, result);
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o usuário não for encontrado")
+    public void testSavePost_WhenPassInvalidUserData_ShouldThrowObjectNotFoundException(){
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.savePost(postCreationDTO, ));
+    }
+
 }
