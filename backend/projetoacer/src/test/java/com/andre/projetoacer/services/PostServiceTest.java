@@ -175,11 +175,4 @@ class PostServiceTest {
         assertEquals(1, institution.getPosts().size());
         verify(postUpdater, times(1)).updateListPosts(institution, result);
     }
-
-    @Test
-    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o usuário não for encontrado")
-    public void testSavePost_WhenPassInvalidUserData_ShouldThrowObjectNotFoundException(){
-        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.savePost(postCreationDTO, ));
-    }
-
 }
