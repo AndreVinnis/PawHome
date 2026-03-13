@@ -86,7 +86,7 @@ public class PostResource {
 	
 	@GetMapping("/strays")
 	public ResponseEntity<List<PostDTO>> getStrays(){
-		List<Post> list = service.getStrays();
+		List<Post> list = service.getStraysAnimals();
 		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());	
 		return ResponseEntity.ok().body(listDTO);
 	}

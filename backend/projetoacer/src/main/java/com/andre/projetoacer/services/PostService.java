@@ -90,7 +90,7 @@ public class PostService {
 		    }
 	}
 	
-	public List<Post> getStrays(){
+	public List<Post> getStraysAnimals(){
 		List<Post> animals = findAll();
 		List<Post> strays = new LinkedList<>();
 		

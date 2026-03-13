@@ -20,6 +20,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -277,4 +278,51 @@ class PostServiceTest {
         assertNotNull(result);
         assertEquals(message, result.getMessage());
     }
+
+    @Test
+    @DisplayName("Deve retornar uma lista de post somento com animais do tipo STRAY")
+    public void testGetStrays_ShouldReturnAListOfPosts(){
+        Post post1 = new Post();
+        Post post2 = new Post();
+        AnimalDTO animal1 = new AnimalDTO();
+        AnimalDTO animal2 = new AnimalDTO();
+        animal1.setType(Type.STRAY);
+        animal2.setType(Type.STRAY);
+        post1.setAnimalDTO(animal1);
+        post2.setAnimalDTO(animal2);
+        Post[] postsStray = {post1, post2};
+        List<Post> posts = Arrays.asList(post, post1, post2);
+
+        when(postRepository.findAll()).thenReturn(posts);
+
+        List<Post> result = postService.getStraysAnimals();
+
+        assertNotNull(posts);
+        assertEquals(2, result.size());
+        assertArrayEquals(postsStray, result.toArray());
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista de post somento com animais do tipo STRAY")
+    public void testGetDomestic_ShouldReturnAListOfPosts(){
+        Post post1 = new Post();
+        Post post2 = new Post();
+        AnimalDTO animal1 = new AnimalDTO();
+        AnimalDTO animal2 = new AnimalDTO();
+        animal1.setType(Type.DOMESTIC);
+        animal2.setType(Type.STRAY);
+        post1.setAnimalDTO(animal1);
+        post2.setAnimalDTO(animal2);
+        Post[] postsDomestics = {post, post1};
+        List<Post> posts = Arrays.asList(post, post1, post2);
+
+        when(postRepository.findAll()).thenReturn(posts);
+
+        List<Post> result = postService.getDomesticAnimals();
+
+        assertNotNull(posts);
+        assertEquals(2, result.size());
+        assertArrayEquals(postsDomestics, result.toArray());
+    }
+
 }
