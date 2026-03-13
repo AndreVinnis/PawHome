@@ -35,14 +35,11 @@ public class PostService {
 	
 	public Post findById(String id) {
 		Optional<Post> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
 	}
 	
 	public Post savePost(PostCreationDTO post, UserDetails userDetails) {
-        Animal animal = new Animal(post.name(), post.age(), post.weight(), post.sex(), post.species(), post.size(), post.type(), post.race(), post.description());
-        Post newPost;
         GenericUser genericUser;
-
 		if (userDetails instanceof Institution institution){
             genericUser = institution;
         }
@@ -50,8 +47,11 @@ public class PostService {
             genericUser = user;
         }
         else{
-            throw new ObjectNotFoundException("Usuário não encontrado");
+            throw new ObjectNotFoundException("Usuário não encontrado!");
         }
+
+        Animal animal = new Animal(post.name(), post.age(), post.weight(), post.sex(), post.species(), post.size(), post.type(), post.race(), post.description());
+        Post newPost;
 
         animalService.saveAnimal(animal);
         newPost = new Post(new Date(), post.title(), new AuthorDTO(genericUser), new AnimalDTO(animal));
@@ -61,45 +61,36 @@ public class PostService {
 
     public void uploadAnimalImage(String id, MultipartFile file) {
         try {
-            Post post = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado"));
+            Post post = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
             Animal animal = animalService.findById(post.getAnimalDTO().getAnimalId());
             byte[] bytes = file.getBytes();
             animal.setImage(bytes);
             animalService.saveAnimal(animal);
+            post.setImageAnimal(bytes);
+            repository.save(post);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao processar a imagem");
+            throw new RuntimeException("Erro ao processar a imagem!");
         }
     }
 	
 	public void delete(String id) {
-		repository.deleteById(id);
+        repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
+        repository.deleteById(id);
 	}
 	
-	public Post update(Post newObj, String id) {
-		Post inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
-		partialUpdate(inicialObj, newObj);
-		return repository.save(inicialObj);   
+	public Post update(String newPostTitle, String id) {
+		Post originalPost = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
+		partialUpdate(originalPost, newPostTitle);
+		return repository.save(originalPost);
 	}
 	
-	private void partialUpdate(Post inicialObj, Post newObj) {	
-		    if (newObj.getTitle() != null) {
-				inicialObj.setTitle(newObj.getTitle());
-		    }
-		    if (newObj.getAuthor() != null) {
-				inicialObj.setAuthor(newObj.getAuthor());		
-			}
-		    if (newObj.getAnimalDTO() != null) {
-				inicialObj.setAnimalDTO(newObj.getAnimalDTO());
-		    }
-		    if (newObj.getImageUser() != null) {
-				inicialObj.setImageUser(newObj.getImageUser());
-		    }
-		    if (newObj.getImageAnimal() != null) {
-				inicialObj.setImageAnimal(newObj.getImageAnimal());
+	private void partialUpdate(Post inicialPost, String newPostTitle) {
+		    if (newPostTitle != null) {
+                inicialPost.setTitle(newPostTitle);
 		    }
 	}
 	
-	public List<Post> getStrays(){
+	public List<Post> getStraysAnimals(){
 		List<Post> animals = findAll();
 		List<Post> strays = new LinkedList<>();
 		

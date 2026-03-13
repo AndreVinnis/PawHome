@@ -38,6 +38,9 @@ public class Post implements Serializable {
 		this.animalDTO = animalDTO;
 	}
 
+    public Post(){
+    }
+
 	public String getId() {
 		return id;
 	}

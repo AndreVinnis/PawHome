@@ -28,37 +28,60 @@ public class AnimalDTO implements Serializable{
 		type = animal.getType();
 		isAdopted = animal.getIsAdopted();
 	}
-	
-	public String getAnimalId() {
-		return animalId;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public Integer getAge() {
-		return age;
-	}
-	
-	public Sex getSex() {
-		return sex;
-	}
 
-	public Type getType() {
-		return type;
-	}
+    public Integer getAge() {
+        return age;
+    }
 
-	public Boolean getIsAdopted() {
-		return isAdopted;
-	}
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
-	public String getImagemUrl() {
-		return imagemUrl;
-	}
+    public String getAnimalId() {
+        return animalId;
+    }
 
-	public void setImagemUrl(String imagemUrl) {
-		this.imagemUrl = imagemUrl;
-	}
+    public void setAnimalId(String animalId) {
+        this.animalId = animalId;
+    }
 
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
+    }
+
+    public Boolean getAdopted() {
+        return isAdopted;
+    }
+
+    public void setAdopted(Boolean adopted) {
+        isAdopted = adopted;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
 }

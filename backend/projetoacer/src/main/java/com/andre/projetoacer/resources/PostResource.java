@@ -79,14 +79,14 @@ public class PostResource {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody Post post, @PathVariable String id) {
-		post = service.update(post, id);
+	public ResponseEntity<Void> update(@RequestBody String newPostTitle, @PathVariable String id) {
+		service.update(newPostTitle, id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/strays")
 	public ResponseEntity<List<PostDTO>> getStrays(){
-		List<Post> list = service.getStrays();
+		List<Post> list = service.getStraysAnimals();
 		List<PostDTO> listDTO = list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());	
 		return ResponseEntity.ok().body(listDTO);
 	}
