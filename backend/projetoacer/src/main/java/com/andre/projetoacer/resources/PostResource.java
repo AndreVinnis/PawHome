@@ -79,8 +79,8 @@ public class PostResource {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody Post post, @PathVariable String id) {
-		post = service.update(post, id);
+	public ResponseEntity<Void> update(@RequestBody String newPostTitle, @PathVariable String id) {
+		service.update(newPostTitle, id);
 		return ResponseEntity.noContent().build();
 	}
 	

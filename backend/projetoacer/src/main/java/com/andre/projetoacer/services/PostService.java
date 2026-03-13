@@ -66,36 +66,27 @@ public class PostService {
             byte[] bytes = file.getBytes();
             animal.setImage(bytes);
             animalService.saveAnimal(animal);
+            post.setImageAnimal(bytes);
+            repository.save(post);
         } catch (IOException e) {
             throw new RuntimeException("Erro ao processar a imagem!");
         }
     }
 	
 	public void delete(String id) {
-		repository.deleteById(id);
+        repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
+        repository.deleteById(id);
 	}
 	
-	public Post update(Post newObj, String id) {
-		Post inicialObj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
-		partialUpdate(inicialObj, newObj);
-		return repository.save(inicialObj);   
+	public Post update(String newPostTitle, String id) {
+		Post originalPost = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Post não encontrado!"));
+		partialUpdate(originalPost, newPostTitle);
+		return repository.save(originalPost);
 	}
 	
-	private void partialUpdate(Post inicialObj, Post newObj) {	
-		    if (newObj.getTitle() != null) {
-				inicialObj.setTitle(newObj.getTitle());
-		    }
-		    if (newObj.getAuthor() != null) {
-				inicialObj.setAuthor(newObj.getAuthor());		
-			}
-		    if (newObj.getAnimalDTO() != null) {
-				inicialObj.setAnimalDTO(newObj.getAnimalDTO());
-		    }
-		    if (newObj.getImageUser() != null) {
-				inicialObj.setImageUser(newObj.getImageUser());
-		    }
-		    if (newObj.getImageAnimal() != null) {
-				inicialObj.setImageAnimal(newObj.getImageAnimal());
+	private void partialUpdate(Post inicialPost, String newPostTitle) {
+		    if (newPostTitle != null) {
+                inicialPost.setTitle(newPostTitle);
 		    }
 	}
 	

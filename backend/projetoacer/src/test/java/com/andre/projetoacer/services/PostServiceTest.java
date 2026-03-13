@@ -12,10 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -111,7 +114,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma exceção quando passado um id inexistente")
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando passado um id inexistente buscando um post por id")
     public void testFindById_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         String message = "Objeto não encontrado!";
 
@@ -174,5 +177,104 @@ class PostServiceTest {
         assertEquals(false, result.getAnimalDTO().getAdopted());
         assertEquals(1, institution.getPosts().size());
         verify(postUpdater, times(1)).updateListPosts(institution, result);
+    }
+
+    @Test
+    @DisplayName("Deve fazer o upload da imagem do animal no post")
+    public void testUploadAnimalImage_WhenPassCorrectAnimalImages_ShouldUpdatePost(){
+        ArgumentCaptor<Post> postCaptor = ArgumentCaptor.forClass(Post.class);
+        Animal animal = new Animal();
+        MultipartFile image = new MockMultipartFile(
+                "file",
+                "dog-foto.jpg",
+                "image/jpeg",
+                "conteúdo da imagem".getBytes()
+        );
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.of(post));
+        when(animalService.findById(anyString())).thenReturn(animal);
+        when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        postService.uploadAnimalImage(anyString(), image);
+
+        verify(animalService, times(1)).findById(anyString());
+        verify(postRepository, times(1)).findById(anyString());
+        verify(postRepository, times(1)).save(postCaptor.capture());
+        Post result = postCaptor.getValue();
+        assertNotNull(animal.getImage());
+        assertNotNull(result.getImageAnimal());
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando passado um id inexistente fazendo upload da imagem do animal")
+    public void testUploadAnimalImage_WhenPassNonExistentId_ShouldThrowObjectNotFoundException(){
+        String message = "Post não encontrado!";
+        MultipartFile image = new MockMultipartFile(
+                "file",
+                "dog-foto.jpg",
+                "image/jpeg",
+                "conteúdo da imagem".getBytes()
+        );
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.uploadAnimalImage(anyString(), image));
+
+        verify(postRepository, times(1)).findById(anyString());
+        assertNotNull(result);
+        assertEquals(message, result.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve deletar um post quando passado um id existente")
+    public void testDeletePost_WhenPassExistentId_ShouldDeletePost(){
+        post.setId("rwqaewda3434q");
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.of(post));
+
+        postService.delete(post.getId());
+
+        verify(postRepository, times(1)).findById(anyString());
+        verify(postRepository, times(1)).deleteById(anyString());
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando passado um id inexistente deletando um post")
+    public void testDeletePost_WhenPassNonExistentId_ShouldThrowObjectNotFoundException(){
+        String message = "Post não encontrado!";
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.delete(anyString()));
+        assertNotNull(result);
+        assertEquals(message, result.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve fazer a atualização do title do post")
+    public void testUpdatePost_WhenPassCorrectTitle_ShouldUpdatePost(){
+        String newTitle = "newTitle";
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.of(post));
+        when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Post result = postService.update(newTitle, anyString());
+
+        assertNotNull(result);
+        assertEquals(newTitle, result.getTitle());
+        verify(postRepository, times(1)).findById(anyString());
+        verify(postRepository, times(1)).save(any(Post.class));
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando passado um id inexistente atualizando o título do post")
+    public void testUpdatePost_WhenPassNonExistentId_ShouldThrowObjectNotFoundException(){
+        String message = "Post não encontrado!";
+
+        when(postRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> postService.update("Qualquer string", anyString()));
+        assertNotNull(result);
+        assertEquals(message, result.getMessage());
     }
 }
