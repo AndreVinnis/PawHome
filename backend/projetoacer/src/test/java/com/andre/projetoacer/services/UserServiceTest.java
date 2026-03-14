@@ -35,8 +35,109 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    @DisplayName("Deve retornar uma lista, não vazia, com todos os usuários")
+    public void testFindAll_ShouldReturnAListWithAllUsers(){
+        User user1 = new User();
+        User user2 = new User();
+        User user3 = new User();
+        User user4 = new User();
+        User user5 = new User();
+        user1.setName("André");
+        user2.setName("Myllena");
+        user3.setName("Tereza");
+        user4.setName("Rafael");
+        user5.setName("Luan");
+        List<User> expectedList = Arrays.asList(user1, user2, user3, user4, user5);
+
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2, user3, user4, user5));
+
+        List<User> result = userService.findAll();
+
+        assertNotNull(result);
+        assertArrayEquals(expectedList.toArray(), result.toArray());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista vazia de usuários")
+    public void testFindAll_WhenDontHaveUsers_ShouldReturnAEmptyListUsers(){
+        List<User> expectedList = Arrays.asList();
+
+        when(userRepository.findAll()).thenReturn(Arrays.asList());
+
+        List<User> result = userService.findAll();
+
+        assertNotNull(result);
+        assertArrayEquals(expectedList.toArray(), result.toArray());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve retornar um User com sucesso quando o ID existir")
+    public void testFindById_WhenPassExistedId_ShouldReturnUser(){
+        String userId = "jsdiasjdasjdasd";
+        User user = new User();
+        user.setId(userId);
+        user.setName("André");
+        user.setEmail("andre@email.com");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        User result = userService.findById(userId);
+
+        assertNotNull(result);
+        assertEquals("André", result.getName());
+        assertEquals("andre@email.com", result.getEmail());
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o ID não existir")
+    public void testFindById_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
+        String wrongId = "fdasdasdasda";
+        String expectedMessage = "User not found";
+
+        when(userRepository.findById(wrongId)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> userService.findById(wrongId));
+        assertEquals(expectedMessage, result.getMessage());
+        verify(userRepository, times(1)).findById(wrongId);
+    }
+
+    @Test
+    @DisplayName("Deve retornar um User com sucesso quando o email existir")
+    public void testFindByEmail_WhenPassExistedEmail_ShouldReturnUser(){
+        String userEmail = "andre@email.com";
+        User user = new User();
+        user.setName("André");
+        user.setId("sdasdasdasdasd");
+
+        when(userRepository.findByEmail(userEmail)).thenReturn(user);
+
+        User result = userService.findByEmail(userEmail);
+
+        assertNotNull(result);
+        assertEquals("André", result.getName());
+        assertEquals("sdasdasdasdasd", result.getId());
+        verify(userRepository, times(1)).findByEmail(userEmail);
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o email não existir")
+    public void testFindByEmail_WhenPassNonexistedEmail_ShouldThrowObjectNotFoundException(){
+        String wrongEmail = "andre@email.com";
+        String expectedMessage = "User not found";
+
+        when(userRepository.findByEmail(wrongEmail)).thenReturn(null);
+
+        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> userService.findByEmail(wrongEmail));
+        assertEquals(expectedMessage, result.getMessage());
+        verify(userRepository, times(1)).findByEmail(wrongEmail);
+    }
+
+    @Test
     @DisplayName("Deve salvar um usuário com sucesso quando os dados forem válidos")
-    public void saveUserSuccessfully(){
+    public void testSaveUser_WhenPassCorrectDatas_ShouldSaveUser(){
         //Arrange(Organiza)
         UserCreationDTO userCreationDTO = new UserCreationDTO(
                 "André", "Silva", "12345678900", new Date(),
@@ -65,7 +166,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma RuntimeException de usuário já cadastrado com esse email")
-    public void saveUserEmailAlreadyExists(){
+    public void testSaveUser_WhenPassAlreadyExistedEmail_ShouldThrowRuntimeException(){
         UserCreationDTO userCreationDTO = new UserCreationDTO(
                 "André", "Silva", "12345678900", new Date(),
                 "andre@email.com", "1199999999", "senha123",
@@ -81,139 +182,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar um User com sucesso quando o ID existir")
-    public void findUserByIdSuccessfully(){
-        String userId = "jsdiasjdasjdasd";
-        User user = new User();
-        user.setId(userId);
-        user.setName("André");
-        user.setEmail("andre@email.com");
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        User result = userService.findById(userId);
-
-        assertNotNull(result);
-        assertEquals("André", result.getName());
-        assertEquals("andre@email.com", result.getEmail());
-        verify(userRepository, times(1)).findById(userId);
-    }
-
-    @Test
-    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o ID não existir")
-    public void findUserByIdWithWrongId(){
-        String wrongId = "fdasdasdasda";
-        String expectedMessage = "User not found";
-
-        when(userRepository.findById(wrongId)).thenReturn(Optional.empty());
-
-        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> userService.findById(wrongId));
-        assertEquals(expectedMessage, result.getMessage());
-        verify(userRepository, times(1)).findById(wrongId);
-    }
-
-    @Test
-    @DisplayName("Deve retornar um User com sucesso quando o email existir")
-    public void findUserByEmailSuccessfully(){
-        String userEmail = "andre@email.com";
-        User user = new User();
-        user.setName("André");
-        user.setId("sdasdasdasdasd");
-
-        when(userRepository.findByEmail(userEmail)).thenReturn(user);
-
-        User result = userService.findByEmail(userEmail);
-
-        assertNotNull(result);
-        assertEquals("André", result.getName());
-        assertEquals("sdasdasdasdasd", result.getId());
-        verify(userRepository, times(1)).findByEmail(userEmail);
-    }
-
-    @Test
-    @DisplayName("Deve lançar uma exceção ObjectNotFoundException quando o email não existir")
-    public void findUserByEmailWithWrongEmail(){
-        String wrongEmail = "andre@email.com";
-        String expectedMessage = "User not found";
-
-        when(userRepository.findByEmail(wrongEmail)).thenReturn(null);
-
-        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> userService.findByEmail(wrongEmail));
-        assertEquals(expectedMessage, result.getMessage());
-        verify(userRepository, times(1)).findByEmail(wrongEmail);
-    }
-
-    @Test
-    @DisplayName("Deve retornar uma lista, não vazia, com todos os usuários")
-    public void findAllUserNotEmpty(){
-        User user1 = new User();
-        User user2 = new User();
-        User user3 = new User();
-        User user4 = new User();
-        User user5 = new User();
-        user1.setName("André");
-        user2.setName("Myllena");
-        user3.setName("Tereza");
-        user4.setName("Rafael");
-        user5.setName("Luan");
-        List<User> expectedList = Arrays.asList(user1, user2, user3, user4, user5);
-
-        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2, user3, user4, user5));
-
-        List<User> result = userService.findAll();
-
-        assertNotNull(result);
-        assertArrayEquals(expectedList.toArray(), result.toArray());
-        verify(userRepository, times(1)).findAll();
-    }
-
-    @Test
-    @DisplayName("Deve retornar uma lista vazia de usuários")
-    public void findAllUserEmpty(){
-        List<User> expectedList = Arrays.asList();
-
-        when(userRepository.findAll()).thenReturn(Arrays.asList());
-
-        List<User> result = userService.findAll();
-
-        assertNotNull(result);
-        assertArrayEquals(expectedList.toArray(), result.toArray());
-        verify(userRepository, times(1)).findAll();
-    }
-
-    @Test
-    @DisplayName("Deve apagar um usuário pelo ID com sucesso")
-    public void deleteUserById(){
-        String userId = "dsadasdasdasd";
-        User user = new User();
-        user.setId(userId);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        userService.delete(userId);
-
-        verify(userRepository, times(1)).deleteById(userId);
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção e não chamar o delete quando o usuário não existir")
-    void shouldNotDeleteWhenUserNotFound() {
-        String userId = "dsadasdasdasd";
-        String expectedMessage = "User not found";
-
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> {
-            userService.delete(userId);
-        });
-
-        assertEquals(expectedMessage, result.getMessage());
-        verify(userRepository, never()).deleteById(userId);
-    }
-
-    @Test
     @DisplayName("Deve fazer as alterações passadas e savar os usuários com as alterações feitas")
-    public void updateUserSuccessfully(){
+    public void testUpdate_WhenPassCorrectDatas_ShouldUpdateUser(){
         User user = new User();
         UserCreationDTO newUser = new UserCreationDTO(
                 "Andre Vinícius",
@@ -245,7 +215,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção de ObjectNotFoundException(Usuário não encontrado) e não fazer o update")
-    public void shouldNotUpdateWhenUserNotFound(){
+    public void testUpdate_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         String userId = "dsadasdasdasd";
         String expectedMessage = "User not found";
         UserCreationDTO newUser = new UserCreationDTO(
@@ -273,7 +243,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Deve salvar uma alteração na imagem do usuário com sucesso")
-    public void updateUserImagemSuccessfully(){
+    public void testUploadUserImage_WhenPassCorrectDatas_ShouldUpdateUserImage(){
         User user = new User();
         String userId = "dsuadasdashdiausdasd";
         user.setId(userId);
@@ -294,7 +264,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Deve retornar uma ObjectNotFoundException")
-    public void shouldNotUpdateImageWhenUserNotFound(){
+    public void testUploadUserImage_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         User user = new User();
         String userId = "dsuadasdashdiausdasd";
         String message = "Usuário não encontrado";
@@ -310,5 +280,35 @@ public class UserServiceTest {
         ObjectNotFoundException result =assertThrows(ObjectNotFoundException.class, () -> userService.uploadUserImage(userId, image));
 
         assertEquals(message, result.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve apagar um usuário pelo ID com sucesso")
+    public void testDeleteById_WhenPassExistedId_ShouldDeleteUser(){
+        String userId = "dsadasdasdasd";
+        User user = new User();
+        user.setId(userId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.delete(userId);
+
+        verify(userRepository, times(1)).deleteById(userId);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção e não chamar o delete quando o usuário não existir")
+    void testDeleteById_WhenPassNonexistedId_ShouldThrowObjectNotFoundException() {
+        String userId = "dsadasdasdasd";
+        String expectedMessage = "User not found";
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException result = assertThrows(ObjectNotFoundException.class, () -> {
+            userService.delete(userId);
+        });
+
+        assertEquals(expectedMessage, result.getMessage());
+        verify(userRepository, never()).deleteById(userId);
     }
 }
