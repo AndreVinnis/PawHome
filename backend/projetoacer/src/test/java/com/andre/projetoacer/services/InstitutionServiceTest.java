@@ -35,7 +35,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve retornar uma lista com todos os usuários")
-    public void shouldReturnAllInstitutions(){
+    public void testFindAll_ShouldReturnAListWithAllInstitutions(){
         Institution institution1 = new Institution();
         Institution institution2 = new Institution();
         Institution institution3 = new Institution();
@@ -56,7 +56,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve retornar um usuário com sucesso buscando pelo id")
-    public void shouldReturnAInstitution_When_FindById(){
+    public void testFindById_WhenPassExistedId_ShouldReturnInstitution(){
         Institution institution = new Institution();
         String institutionId = "dsdasdsdasdasdasd";
         String institutionName = "Vet+";
@@ -75,7 +75,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção de ObjectNotFoundException quando passado um id inexistente")
-    public void shouldThrowObjectNotFoundException_With_WrongId(){
+    public void testFindById_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         String institutionId = "dsdasdsdasdasdasd";
         String message = "Institution not found!";
 
@@ -89,7 +89,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve retornar um usuário com sucesso buscando pelo email")
-    public void shouldReturnAInstitution_When_FindByEmail(){
+    public void testFindByEmail_WhenPassExistedEmail_ShouldReturnInstitution(){
         Institution institution = new Institution();
         String institutionEmail = "vet+.adocao@gmail.com";
         String institutionName = "Vet+";
@@ -108,7 +108,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção de ObjectNotFoundException quando passado um email inexistente")
-    public void shouldThrowObjectNotFoundException_With_WrongEmail(){
+    public void testFindByEmail_WhenPassNonexistedEmail_ShouldThrowObjectNotFoundException(){
         String institutionEmail = "vet+.adocao@gmail.com";
         String message = "Institution not found!";
 
@@ -122,7 +122,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve retornar um usuário com sucesso buscando pelo cnpj")
-    public void shouldReturnAInstitution_When_FindByCnpj(){
+    public void testFindByCnpj_WhenPassExistedCnpj_ShouldReturnInstitution(){
         Institution institution = new Institution();
         String institutionCnpj = "14526378964526";
         String institutionName = "Vet+";
@@ -141,7 +141,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção de ObjectNotFoundException quando passado um cnpj inexistente")
-    public void shouldThrowObjectNotFoundException_With_WrongCnpj(){
+    public void testFindByCnpj_WhenPassNonexistedCnpj_ShouldThrowObjectNotFoundException(){
         String institutionCnpj = "14526378964526";
         String message = "Institution not found!";
 
@@ -155,7 +155,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve salvar um usuário com sucesso")
-    public  void saveInstitutionSuccessfully(){
+    public  void testSaveInstitution_WhenPassCorrectDatas_ShouldSaveInstitution(){
         InstitutionCreationDTO institutionCreationDTO = new InstitutionCreationDTO(
                 "Instituto adota-patos",
                 "123456780001090",
@@ -186,8 +186,8 @@ class InstitutionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma RuntimeException de isntituição já cadastrada com esse email")
-    public void shouldThrowRunTimeExceptionWhenEmailAlreadyExist(){
+    @DisplayName("Deve lançar uma RuntimeException de instituição já cadastrada com esse email")
+    public void testSaveInstitution_WhenPassAlreadyExistedEmail_ShouldThrowRuntimeException(){
         InstitutionCreationDTO institutionCreationDTO = new InstitutionCreationDTO(
                 "Instituto adota-patos",
                 "123456780001090",
@@ -212,7 +212,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma RuntimeException de isntituição já cadastrada com esse cnpj")
-    public void shouldThrowRunTimeExceptionWhenCnpjAlreadyExist(){
+    public void testSaveInstitution_WhenPassAlreadyExistedCnpj_ShouldThrowRuntimeException(){
         InstitutionCreationDTO institutionCreationDTO = new InstitutionCreationDTO(
                 "Instituto adota-patos",
                 "123456780001090",
@@ -237,7 +237,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve salvar a imagem da instituição com sucesso")
-    public void shouldSaveInstitutionImageSuccessfully(){
+    public void testUploadInstitutionImage_WhenPassCorrectDatas_ShouldUploadInstitutionImage(){
         Institution institution = new Institution();
         String institutionId = "bgidyuagsidgas";
         institution.setId(institutionId);
@@ -250,7 +250,7 @@ class InstitutionServiceTest {
 
         when(institutionRepository.findById(institutionId)).thenReturn(Optional.of(institution));
 
-        institutionService.uploadUserImage(institutionId, image);
+        institutionService.uploadInstitutionImage(institutionId, image);
 
         assertNotNull(institution.getImage());
         verify(institutionRepository, times(1)).save(institution);
@@ -258,7 +258,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção quando a instituição não for encontrada")
-    public void shouldThrowObjectNotFoundException_When_PassNonexistentId_UploadingImage(){
+    public void testUploadInstitutionImage_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         String institutionId = "bgidyuagsidgas";
         MultipartFile image = new MockMultipartFile(
                 "file",
@@ -269,7 +269,7 @@ class InstitutionServiceTest {
 
         when(institutionRepository.findById(institutionId)).thenReturn(Optional.empty());
 
-        Exception result = assertThrows(ObjectNotFoundException.class, () -> institutionService.uploadUserImage(institutionId, image));
+        Exception result = assertThrows(ObjectNotFoundException.class, () -> institutionService.uploadInstitutionImage(institutionId, image));
 
         assertNotNull(result);
         verify(institutionRepository, times(1)).findById(institutionId);
@@ -277,7 +277,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve atualizar o cadastro da instituição")
-    public void shouldUpdadeInstitutionSuccessfully(){
+    public void testUpdateInstitution_WhenPassCorrectDatas_ShouldUpdateInstitution(){
         InstitutionCreationDTO institutionCreationDTO = new InstitutionCreationDTO(
                 "Instituto adota-patos",
                 "123456780001090",
@@ -308,7 +308,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção ObjectNotFoundException e não fazer a update")
-    public void shouldThrowObjectNotFoundException_When_PassNonexistentId_UpdatingInstitution(){
+    public void testUpdateInstitution_WhenPassNonexistedId_ShouldThrowObjectNotFoundException(){
         InstitutionCreationDTO institutionCreationDTO = new InstitutionCreationDTO(
                 "Instituto adota-patos",
                 "123456780001090",
@@ -334,7 +334,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve deletar uma instituição com sucesso")
-    public void shouldDeleteAInstitutionSuccessfully(){
+    public void testDeleteInstitution_WhenPassExistedId_ShouldDeleteInstitution(){
         Institution institution = new Institution();
         String institutionId = "dfadasdadsasdasdasd";
         institution.setId(institutionId);
@@ -348,7 +348,7 @@ class InstitutionServiceTest {
 
     @Test
     @DisplayName("Deve lançar exceção e não chamar o delete quando a instituição não existir")
-    void shouldThrowOjectNotFoundException_When_PassNonexistentId_DeletingInstitution() {
+    public void testDeleteInstitution_WhenPassNonexistedId_ShouldThrowObjectNotFoundException() {
         String userId = "dsadasdasdasd";
         String expectedMessage = "Institution not found!";
 
