@@ -62,7 +62,7 @@ public class InstitutionResource {
 
     @PostMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
-        service.uploadUserImage(id, file);
+        service.uploadInstitutionImage(id, file);
         return ResponseEntity.noContent().build();
     }
 

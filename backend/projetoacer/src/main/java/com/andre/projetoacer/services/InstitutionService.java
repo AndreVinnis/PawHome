@@ -67,7 +67,7 @@ public class InstitutionService {
         return repository.save(newInstitution);
     }
 
-    public void uploadUserImage(String id, MultipartFile file) {
+    public void uploadInstitutionImage(String id, MultipartFile file) {
         try {
             Institution institution = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado!"));
             byte[] bytes = file.getBytes();

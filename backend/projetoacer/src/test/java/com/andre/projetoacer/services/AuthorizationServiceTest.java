@@ -42,7 +42,7 @@ class AuthorizationServiceTest {
 
     @Test
     @DisplayName("Deve retornar um usuário passando um email válido")
-    public void shouldReturnUserDetails_When_PassValidUserEmail(){
+    public void testLoadUserByUserName_WhenPassCorrectUserDatas_ShouldReturnUserDetails(){
         User user = new User();
         user.setEmail(userEmail);
 
@@ -55,8 +55,8 @@ class AuthorizationServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma isntituição passando um email válido")
-    public void shouldReturnUserDetails_When_PassValidInstitutionEmail(){
+    @DisplayName("Deve retornar uma instituição passando um email válido")
+    public void testLoadUserByUserName_WhenPassCorrectInstitutionDatas_ShouldReturnUserDetails(){
         Institution institution = new Institution();
         institution.setEmail(institutionEmail);
 
@@ -70,7 +70,7 @@ class AuthorizationServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção quando passado um email de usuário inexistente")
-    public void shouldThrowUsernameNotFoundException_When_PassNonexistentUserEmail(){
+    public void testLoadUserByUserName_WhenPassNonexistedEmailUser_ShouldRThrowUsernameNotFoundException(){
         when(userRepository.findByEmail(userEmail)).thenReturn(null);
 
         Exception result = assertThrows(UsernameNotFoundException.class, () -> authorizationService.loadUserByUsername(userEmail));
@@ -81,7 +81,7 @@ class AuthorizationServiceTest {
 
     @Test
     @DisplayName("Deve lançar uma exceção quando passado um email de instituição inexistente")
-    public void shouldThrowUsernameNotFoundException_When_PassNonexistentInstitutionEmail(){
+    public void testLoadUserByUserName_WhenPassNonexistedEmailInstitution_ShouldRThrowUsernameNotFoundException(){
         when(institutionRepository.findByEmail(institutionEmail)).thenReturn(null);
 
         Exception result = assertThrows(UsernameNotFoundException.class, () -> authorizationService.loadUserByUsername(institutionEmail));

@@ -36,12 +36,12 @@ public class UserService {
 
     public User findById(String id) {
         Optional<User> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("User not found!"));
     }
 
     public User findByEmail(String email) {
         User obj = repository.findByEmail(email);
-        if(obj == null) throw new ObjectNotFoundException("User not found");
+        if(obj == null) throw new ObjectNotFoundException("User not found!");
         return obj;
     }
 
@@ -49,7 +49,7 @@ public class UserService {
         User existingUser = repository.findByEmail(user.email());
 
         if (existingUser != null) {
-            throw new RuntimeException("E-mail já cadastrado no sistema.");
+            throw new RuntimeException("E-mail já cadastrado no sistema!");
         }
 
         Address address = new Address(user.cep(), user.city(), user.neighborhood(), user.number(), user.referencePoint());
@@ -58,7 +58,7 @@ public class UserService {
     }
 
     public User update(String id, UserCreationDTO newUser) {
-        User originalUser = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        User originalUser = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found!"));
         partialUpdate(originalUser, newUser);
         return repository.save(originalUser);
     }
@@ -108,7 +108,7 @@ public class UserService {
 
     public void delete(String id) {
 	    repository.findById(id)
-	        .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+	        .orElseThrow(() -> new ObjectNotFoundException("User not found!"));
 	    repository.deleteById(id);
     }
 }
