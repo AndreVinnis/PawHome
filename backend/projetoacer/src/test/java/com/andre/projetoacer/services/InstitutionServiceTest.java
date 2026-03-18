@@ -3,8 +3,8 @@ package com.andre.projetoacer.services;
 import com.andre.projetoacer.DTO.institution.InstitutionCreationDTO;
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.Institution;
-import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.repository.InstitutionRepository;
+import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -186,26 +186,26 @@ class InstitutionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma RuntimeException de instituição já cadastrada com esse email")
-    public void testSaveInstitution_WhenPassAlreadyExistedEmail_ShouldThrowRuntimeException(){
+    @DisplayName("Deve lançar uma IncorrectInputValues de instituição já cadastrada com esse email")
+    public void testSaveInstitution_WhenPassAlreadyExistedEmail_ShouldThrowIncorrectInputValues(){
         String message = "E-mail já cadastrado no sistema!";
 
         when(institutionRepository.findByEmail(anyString())).thenReturn(institution);
 
-        Exception result = assertThrows(RuntimeException.class, () -> institutionService.saveInstitution(institutionCreationDTO));
+        Exception result = assertThrows(IncorrectInputValues.class, () -> institutionService.saveInstitution(institutionCreationDTO));
         assertNotNull(result);
         assertEquals(message, result.getMessage());
         verify(institutionRepository, times(1)).findByEmail(anyString());
     }
 
     @Test
-    @DisplayName("Deve lançar uma RuntimeException de isntituição já cadastrada com esse cnpj")
-    public void testSaveInstitution_WhenPassAlreadyExistedCnpj_ShouldThrowRuntimeException(){
+    @DisplayName("Deve lançar uma IncorrectInputValues de isntituição já cadastrada com esse cnpj")
+    public void testSaveInstitution_WhenPassAlreadyExistedCnpj_ShouldThrowIncorrectInputValues(){
         String message = "CNPJ já cadastrado no sistema!";
 
         when(institutionRepository.findByCnpj(anyString())).thenReturn(Optional.of(institution));
 
-        Exception result = assertThrows(RuntimeException.class, () -> institutionService.saveInstitution(institutionCreationDTO));
+        Exception result = assertThrows(IncorrectInputValues.class, () -> institutionService.saveInstitution(institutionCreationDTO));
         assertEquals(message, result.getMessage());
         verify(institutionRepository, times(1)).findByCnpj(anyString());
     }
