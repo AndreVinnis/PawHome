@@ -9,6 +9,7 @@ import com.andre.projetoacer.DTO.institution.InstitutionCreationDTO;
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.UserRole;
+import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,10 +56,10 @@ public class InstitutionService {
         Optional<Institution> existCpnjInstitution = repository.findByCnpj(institution.cnpj());
 
         if(existEmailInstitution != null){
-            throw new RuntimeException("E-mail já cadastrado no sistema!");
+            throw new IncorrectInputValues("E-mail já cadastrado no sistema!");
         }
         if(existCpnjInstitution.isPresent()){
-            throw new RuntimeException("CNPJ já cadastrado no sistema!");
+            throw new IncorrectInputValues("CNPJ já cadastrado no sistema!");
         }
 
         Address address = new Address(institution.cep(), institution.city(), institution.neighborhood(), institution.number(), institution.referencePoint());

@@ -5,6 +5,7 @@ import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.User;
 import com.andre.projetoacer.enums.UserRole;
 import com.andre.projetoacer.repository.UserRepository;
+import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import com.andre.projetoacer.services.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -170,13 +171,13 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma RuntimeException de usuário já cadastrado com esse email")
-    public void testSaveUser_WhenPassAlreadyExistedEmail_ShouldThrowRuntimeException(){
+    @DisplayName("Deve lançar uma IncorrectInputValues de usuário já cadastrado com esse email")
+    public void testSaveUser_WhenPassAlreadyExistedEmail_ShouldThrowIncorrectInputValues(){
         String message = "E-mail já cadastrado no sistema!";
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
-        Exception result = assertThrows(RuntimeException.class, () -> userService.saveUser(userCreationDTO, UserRole.USER));
+        Exception result = assertThrows(IncorrectInputValues.class, () -> userService.saveUser(userCreationDTO, UserRole.USER));
         assertNotNull(result);
         assertEquals(message, result.getMessage());
         verify(userRepository, never()).save(any());

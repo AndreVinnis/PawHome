@@ -50,12 +50,8 @@ public class InstitutionResource {
 
     @PostMapping
     public ResponseEntity<MessageResponse> insert(@RequestBody InstitutionCreationDTO newInstitution) {
-        try{
-            service.saveInstitution(newInstitution);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
-        }catch(RuntimeException ex){
-            return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
-        }
+        service.saveInstitution(newInstitution);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
     }
 
     @PostMapping("/{id}/image")
