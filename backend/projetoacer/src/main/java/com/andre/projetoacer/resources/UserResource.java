@@ -41,19 +41,22 @@ public class UserResource {
     
 	@PostMapping("/normal")
 	public ResponseEntity<MessageResponse> insertNormalUser(@RequestBody UserCreationDTO newUser) {
-        service.saveUser(newUser, UserRole.USER);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        try{
+            service.saveUser(newUser, UserRole.USER);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
 	}
 
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> insertAdminUser(@RequestBody UserCreationDTO newUser) {
         try{
-            service.findByEmail(newUser.email());
-            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
-        }
-        catch(ObjectNotFoundException ex){
             service.saveUser(newUser, UserRole.ADMIN);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
+        }
+        catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 

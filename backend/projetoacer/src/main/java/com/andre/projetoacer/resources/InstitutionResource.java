@@ -53,8 +53,8 @@ public class InstitutionResource {
         try{
             service.saveInstitution(newInstitution);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
-        }catch(ObjectNotFoundException ex){
-            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email!"));
+        }catch(RuntimeException ex){
+            return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
         }
     }
 
