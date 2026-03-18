@@ -51,12 +51,10 @@ public class InstitutionResource {
     @PostMapping
     public ResponseEntity<MessageResponse> insert(@RequestBody InstitutionCreationDTO newInstitution) {
         try{
-            service.findByEmail(newInstitution.email());
-            service.findByCnpj(newInstitution.cnpj());
-            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email."));
-        }catch(ObjectNotFoundException ex){
             service.saveInstitution(newInstitution);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
+        }catch(ObjectNotFoundException ex){
+            return ResponseEntity.badRequest().body(new MessageResponse("Já existe um usuário com esse email!"));
         }
     }
 
