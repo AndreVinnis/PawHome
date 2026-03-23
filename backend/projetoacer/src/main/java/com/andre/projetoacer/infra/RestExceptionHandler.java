@@ -1,6 +1,7 @@
 package com.andre.projetoacer.infra;
 
 import com.andre.projetoacer.DTO.StandardErrorDTO;
+import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,16 @@ public class RestExceptionHandler {
                 System.currentTimeMillis()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(IncorrectInputValues.class)
+    public ResponseEntity<StandardErrorDTO> handleIncorrectValuesException(IncorrectInputValues e) {
+        StandardErrorDTO err = new StandardErrorDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(Exception.class)
