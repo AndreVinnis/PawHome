@@ -6,7 +6,6 @@ import com.andre.projetoacer.services.InstitutionService;
 import com.andre.projetoacer.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
 
