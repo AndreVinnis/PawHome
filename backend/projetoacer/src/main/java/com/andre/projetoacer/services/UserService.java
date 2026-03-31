@@ -9,6 +9,7 @@ import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.GenericUser;
 import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.enums.UserRole;
+import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,7 +51,7 @@ public class UserService {
         User existingUser = repository.findByEmail(user.email());
 
         if (existingUser != null) {
-            throw new RuntimeException("E-mail já cadastrado no sistema!");
+            throw new IncorrectInputValues("E-mail já cadastrado no sistema!");
         }
 
         Address address = new Address(user.cep(), user.city(), user.neighborhood(), user.number(), user.referencePoint());

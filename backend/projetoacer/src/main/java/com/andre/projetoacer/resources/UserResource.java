@@ -41,23 +41,14 @@ public class UserResource {
     
 	@PostMapping("/normal")
 	public ResponseEntity<MessageResponse> insertNormalUser(@RequestBody UserCreationDTO newUser) {
-        try{
-            service.saveUser(newUser, UserRole.USER);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        service.saveUser(newUser, UserRole.USER);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
 	}
 
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> insertAdminUser(@RequestBody UserCreationDTO newUser) {
-        try{
-            service.saveUser(newUser, UserRole.ADMIN);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
-        }
-        catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        service.saveUser(newUser, UserRole.ADMIN);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
     }
 
     @PatchMapping("/{id}/image")
