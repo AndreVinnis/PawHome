@@ -78,6 +78,10 @@ public class InstitutionService {
         }
     }
 
+    public void updateListPosts(Institution institution){
+        repository.save(institution);
+    }
+
     public Institution update(String id, InstitutionCreationDTO newInstitution) {
         Institution originalInstitution = repository.findById(id)
             .orElseThrow(() -> new ObjectNotFoundException("Institution not found!"));

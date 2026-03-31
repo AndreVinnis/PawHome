@@ -60,7 +60,7 @@ public class UserResource {
         }
     }
 
-    @PostMapping("/{id}/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         service.uploadUserImage(id, file);
         return ResponseEntity.noContent().build();
