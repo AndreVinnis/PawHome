@@ -50,7 +50,7 @@ public class PostResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Post criado com sucesso!"));
 	}
 
-    @PostMapping("/{id}/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         service.uploadAnimalImage(id, file);
         return ResponseEntity.noContent().build();

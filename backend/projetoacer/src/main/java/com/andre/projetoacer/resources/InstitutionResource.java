@@ -54,7 +54,7 @@ public class InstitutionResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Instituição criada com sucesso!"));
     }
 
-    @PostMapping("/{id}/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         service.uploadInstitutionImage(id, file);
         return ResponseEntity.noContent().build();

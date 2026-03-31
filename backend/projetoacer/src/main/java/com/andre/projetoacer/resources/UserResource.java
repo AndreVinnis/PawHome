@@ -51,7 +51,7 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Usuário criado com sucesso!"));
     }
 
-    @PostMapping("/{id}/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         service.uploadUserImage(id, file);
         return ResponseEntity.noContent().build();

@@ -27,6 +27,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/login/institution").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/normal").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/users/*/image").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/institutions/*/image").permitAll()
                         .requestMatchers(HttpMethod.POST, "/institutions").permitAll()
                         .anyRequest().authenticated()
                 )

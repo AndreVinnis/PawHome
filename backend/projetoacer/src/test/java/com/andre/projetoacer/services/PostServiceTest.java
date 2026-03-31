@@ -136,7 +136,12 @@ class PostServiceTest {
         user.setName(userName);
 
         when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        doCallRealMethod().when(postUpdater).updateListPosts(eq(user), any(Post.class));
+        doAnswer(invocation -> {
+            GenericUser genericUser = invocation.getArgument(0);
+            Post post = invocation.getArgument(1);
+            genericUser.getPosts().add(post);
+            return null;
+        }).when(postUpdater).updateListPosts(any(GenericUser.class), any(Post.class));
 
         Post result = postService.savePost(postCreationDTO, user);
 
@@ -163,7 +168,12 @@ class PostServiceTest {
         institution.setName(institutionName);
 
         when(postRepository.save(any(Post.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        doCallRealMethod().when(postUpdater).updateListPosts(eq(institution), any(Post.class));
+        doAnswer(invocation -> {
+            GenericUser genericUser = invocation.getArgument(0);
+            Post post = invocation.getArgument(1);
+            genericUser.getPosts().add(post);
+            return null;
+        }).when(postUpdater).updateListPosts(any(GenericUser.class), any(Post.class));
 
         Post result = postService.savePost(postCreationDTO, institution);
 

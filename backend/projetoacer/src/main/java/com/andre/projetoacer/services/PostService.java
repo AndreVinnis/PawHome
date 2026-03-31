@@ -55,8 +55,9 @@ public class PostService {
 
         animalService.saveAnimal(animal);
         newPost = new Post(new Date(), post.title(), new AuthorDTO(genericUser), new AnimalDTO(animal));
+        newPost = repository.save(newPost);
         postUpdater.updateListPosts(genericUser, newPost);
-        return repository.save(newPost);
+        return newPost;
 	}
 
     public void uploadAnimalImage(String id, MultipartFile file) {

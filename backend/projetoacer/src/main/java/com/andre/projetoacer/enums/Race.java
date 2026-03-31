@@ -36,8 +36,8 @@ public enum Race {
     D_MIXED_BREED,               // Vira-lata (Mutt / Mixed-breed Dog)
 
     //Cats
-    D_SIAMESE,                   // Siamese
-    D_PERSA,                     // Persian
+    C_SIAMESE,                   // Siamese
+    C_PERSA,                     // Persian
     C_MAINE_COON,                // Maine Coon
     C_BENGAL,                    // Bengal
     C_RAGDOLL,                   // Ragdoll

@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.andre.projetoacer.DTO.user.UserCreationDTO;
 import com.andre.projetoacer.domain.Address;
 import com.andre.projetoacer.domain.GenericUser;
+import com.andre.projetoacer.domain.Post;
 import com.andre.projetoacer.enums.UserRole;
 import com.andre.projetoacer.services.exception.IncorrectInputValues;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,10 @@ public class UserService {
         User originalUser = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found!"));
         partialUpdate(originalUser, newUser);
         return repository.save(originalUser);
+    }
+
+    public void updateListPosts(User user){
+        repository.save(user);
     }
 
     public void uploadUserImage(String id, MultipartFile file) {
